@@ -20,7 +20,7 @@
                 <a href="/admin/dashboard" class="block py-2.5 px-4 rounded transition bg-blue-700 hover:bg-blue-600">
                     <i class="fas fa-home mr-2"></i> Dashboard Admin
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
+                <a href="/admin/users" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
                     <i class="fas fa-users mr-2"></i> Kelola User
                 </a>
             @elseif(Auth::user()->role === 'guru')

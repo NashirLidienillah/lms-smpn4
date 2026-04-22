@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\UserController;
 
 // Halaman Login
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -14,6 +15,12 @@ Route::middleware(['auth'])->group(function () {
     // Khusus Admin
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () { return view('admin.dashboard'); });
+        Route::get('/admin/users', [UserController::class, 'index']);
+        Route::get('/admin/users/create', [UserController::class, 'create']);
+        Route::post('/admin/users', [UserController::class, 'store']);
+        Route::get('/admin/users/{id}/edit', [UserController::class, 'edit']);
+        Route::put('/admin/users/{id}', [UserController::class, 'update']);
+        Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
     });
 
     // Khusus Guru
