@@ -20,7 +20,7 @@
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Username / NIS</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Username / NIS / NIP</label>
             <input type="text" name="username" value="{{ old('username') }}" required 
                 class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 @error('username') border-red-500 @enderror">
             @error('username') <span class="text-xs text-red-500">{{ $message }}</span> @enderror

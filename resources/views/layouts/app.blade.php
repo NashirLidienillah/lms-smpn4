@@ -18,10 +18,25 @@
             {{-- Menu Dinamis Berdasarkan Role --}}
             @if(Auth::user()->role === 'admin')
                 <a href="/admin/dashboard" class="block py-2.5 px-4 rounded transition bg-blue-700 hover:bg-blue-600">
-                    <i class="fas fa-home mr-2"></i> Dashboard Admin
+                    <i class="fas fa-home mr-2"></i> Dashboard
+                </a>
+                <a href="/admin/tahun-akademik" class="block py-2.5 px-4 rounded transition {{ Request::is('admin/tahun-akademik*') ? 'bg-blue-700' : 'hover:bg-blue-700' }}">
+                    <i class="fas fa-calendar-check mr-2"></i> Tahun Akademik
                 </a>
                 <a href="/admin/users" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
-                    <i class="fas fa-users mr-2"></i> Kelola User
+                    <i class="fas fa-users mr-2"></i> Data Pengguna
+                </a>
+                <a href="/admin/kelas" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
+                    <i class="fas fa-chalkboard mr-2"></i> Data Kelas
+                </a>
+                <a href="/admin/mapel" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
+                    <i class="fas fa-book-open mr-2"></i> Data Mapel
+                </a>
+                <a href="/admin/rombel" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
+                    <i class="fas fa-users-cog mr-2"></i> Rombongan Belajar
+                </a>
+                <a href="/admin/guru-mapel" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
+                    <i class="fas fa-chalkboard-teacher mr-2"></i> Jadwal Pelajaran
                 </a>
             @elseif(Auth::user()->role === 'guru')
                 <a href="/guru/dashboard" class="block py-2.5 px-4 rounded transition bg-blue-700 hover:bg-blue-600">
