@@ -9,6 +9,12 @@ use App\Http\Controllers\Admin\RombelController;
 use App\Http\Controllers\Admin\GuruMapelController;
 use App\Http\Controllers\Admin\TahunAkademikController;
 
+use App\Http\Controllers\Guru\DashboardController;
+use App\Http\Controllers\Guru\MateriController;
+use App\Http\Controllers\Guru\TugasController;
+use App\Http\Controllers\Guru\UjianController;
+use App\Http\Controllers\Guru\SoalController;
+
 // Halaman Login
 Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -52,7 +58,29 @@ Route::middleware(['auth'])->group(function () {
 
     // Khusus Guru
     Route::middleware('role:guru')->group(function () {
-        Route::get('/guru/dashboard', function () { return view('guru.dashboard'); });
+    Route::get('/guru/dashboard', [DashboardController::class, 'index']);
+    // Rute Ruang Kelas & Materi
+    Route::get('/guru/kelas/{id}', [MateriController::class, 'show']);
+    Route::post('/guru/kelas/{id}/materi', [MateriController::class, 'store']);
+    Route::get('/guru/materi/{id}/edit', [MateriController::class, 'edit']);
+    Route::put('/guru/materi/{id}', [MateriController::class, 'update']);
+    Route::delete('/guru/materi/{id}', [MateriController::class, 'destroy']);
+    // Rute Tugas 
+    Route::post('/guru/kelas/{id}/tugas', [TugasController::class, 'store']);
+    Route::get('/guru/tugas/{id}/edit', [TugasController::class, 'edit']);
+    Route::put('/guru/tugas/{id}', [TugasController::class, 'update']);
+    Route::delete('/guru/tugas/{id}', [TugasController::class, 'destroy']);
+    // Rute Ujian CBT
+    Route::post('/guru/kelas/{id}/ujian', [UjianController::class, 'store']);
+    Route::get('/guru/ujian/{id}/edit', [UjianController::class, 'edit']); // BARU
+    Route::put('/guru/ujian/{id}', [UjianController::class, 'update']);
+    Route::delete('/guru/ujian/{id}', [UjianController::class, 'destroy']);
+    // Rute Kelola Soal CBT
+    Route::get('/guru/ujian/{id}', [UjianController::class, 'show']);
+    Route::post('/guru/ujian/{id}/soal', [SoalController::class, 'store']);
+    Route::get('/guru/soal/{id}/edit', [SoalController::class, 'edit']);
+        Route::put('/guru/soal/{id}', [SoalController::class, 'update']);
+    Route::delete('/guru/soal/{id}', [SoalController::class, 'destroy']);
     });
 
     // Khusus Siswa
