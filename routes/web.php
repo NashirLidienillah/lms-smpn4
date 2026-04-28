@@ -9,11 +9,16 @@ use App\Http\Controllers\Admin\RombelController;
 use App\Http\Controllers\Admin\GuruMapelController;
 use App\Http\Controllers\Admin\TahunAkademikController;
 
-use App\Http\Controllers\Guru\DashboardController;
+use App\Http\Controllers\Guru\DashboardController as GuruDashboard;
 use App\Http\Controllers\Guru\MateriController;
 use App\Http\Controllers\Guru\TugasController;
 use App\Http\Controllers\Guru\UjianController;
 use App\Http\Controllers\Guru\SoalController;
+
+use App\Http\Controllers\Siswa\DashboardController as SiswaDashboard;
+use App\Http\Controllers\Siswa\KelasController as SiswaKelas;
+use App\Http\Controllers\Siswa\TugasController as SiswaTugas;
+use App\Http\Controllers\Siswa\UjianController as SiswaUjian;
 
 // Halaman Login
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -58,7 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Khusus Guru
     Route::middleware('role:guru')->group(function () {
-    Route::get('/guru/dashboard', [DashboardController::class, 'index']);
+    Route::get('/guru/dashboard', [GuruDashboard::class, 'index']);
     // Rute Ruang Kelas & Materi
     Route::get('/guru/kelas/{id}', [MateriController::class, 'show']);
     Route::post('/guru/kelas/{id}/materi', [MateriController::class, 'store']);
@@ -79,13 +84,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/ujian/{id}', [UjianController::class, 'show']);
     Route::post('/guru/ujian/{id}/soal', [SoalController::class, 'store']);
     Route::get('/guru/soal/{id}/edit', [SoalController::class, 'edit']);
-        Route::put('/guru/soal/{id}', [SoalController::class, 'update']);
+    Route::put('/guru/soal/{id}', [SoalController::class, 'update']);
     Route::delete('/guru/soal/{id}', [SoalController::class, 'destroy']);
     });
 
     // Khusus Siswa
     Route::middleware('role:siswa')->group(function () {
-        Route::get('/siswa/dashboard', function () { return view('siswa.dashboard'); });
+    Route::get('/siswa/dashboard', [SiswaDashboard::class, 'index']);
+    Route::get('/siswa/kelas/{id}', [SiswaKelas::class, 'show']);
+    Route::get('/siswa/tugas/{id}', [SiswaTugas::class, 'show']);
+    Route::post('/siswa/tugas/{id}/submit', [SiswaTugas::class, 'submit']);
+    Route::get('/siswa/ujian/{id}', [SiswaUjian::class, 'show']);
+    Route::get('/siswa/ujian/{id}/kerjakan', [SiswaUjian::class, 'kerjakan']);
     });
 
 });

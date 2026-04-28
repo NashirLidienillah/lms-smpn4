@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LMS SMPN 4 Kota Serang</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-100 flex h-screen overflow-hidden">
@@ -46,7 +47,7 @@
                     <i class="fas fa-book mr-2"></i> Materi & Tugas
                 </a>
             @elseif(Auth::user()->role === 'siswa')
-                <a href="/siswa/dashboard" class="block py-2.5 px-4 rounded transition bg-blue-700 hover:bg-blue-600">
+                <a href="/siswa/dashboard" class="block py-2.5 px-4 rounded transition {{ Request::is('siswa/dashboard*') ? 'bg-blue-700' : 'hover:bg-blue-700' }}">
                     <i class="fas fa-home mr-2"></i> Dashboard Siswa
                 </a>
                 <a href="#" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">

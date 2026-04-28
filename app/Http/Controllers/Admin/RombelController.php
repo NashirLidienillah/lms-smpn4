@@ -62,13 +62,19 @@ class RombelController extends Controller
             return back()->with('error', 'Siswa tersebut sudah didaftarkan ke kelas pada tahun ajaran ini!');
         }
 
+        // Catat ke tabel Rombel (Riwayat)
         Rombel::create([
             'user_id' => $request->user_id,
             'kelas_id' => $request->kelas_id,
             'tahun_akademik_id' => $tahunAktif->id
         ]);
 
+        // UPDATE JUGA TABEL USERS
         $user = User::findOrFail($request->user_id);
+        $user->update([
+            'kelas_id' => $request->kelas_id
+        ]);
+
         return back()->with('success', $user->name . ' berhasil dimasukkan ke kelas!');
     }
 
@@ -77,7 +83,15 @@ class RombelController extends Controller
     {
         $rombel = Rombel::with('user')->findOrFail($id);
         $namaSiswa = $rombel->user->name;
+        $userId = $rombel->user_id; 
+        
+        // Hapus dari riwayat Rombel
         $rombel->delete(); 
+
+        // KOSONGKAN JUGA KELAS DI TABEL USERS (Biar sinkron)
+        User::where('id', $userId)->update([
+            'kelas_id' => null
+        ]);
 
         return back()->with('success', $namaSiswa . ' berhasil dikeluarkan dari kelas!');
     }
