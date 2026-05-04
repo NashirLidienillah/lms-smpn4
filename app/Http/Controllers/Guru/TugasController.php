@@ -66,6 +66,37 @@ class TugasController extends Controller
         return redirect('/guru/kelas/' . $tugas->guru_mapel_id)->with('success', 'Tugas berhasil diperbarui!');
     }
 
+    // Menampilkan daftar siswa yang sudah/belum kumpul tugas
+    public function koreksi($id)
+    {
+        $tugas = \App\Models\Tugas::findOrFail($id);
+        
+        // Ambil data pengumpulan tugas beserta data siswanya
+        $pengumpulan = \App\Models\PengumpulanTugas::with('siswa')
+                        ->where('tugas_id', $id)
+                        ->get();
+
+        return view('guru.tugas.koreksi', compact('tugas', 'pengumpulan'));
+    }
+
+    // Menyimpan nilai dari guru ke database
+    public function simpanNilai(Request $request, $pengumpulan_id)
+    {
+        $request->validate([
+            'nilai' => 'required|numeric|min:0|max:100',
+            'catatan_guru' => 'nullable|string'
+        ]);
+
+        $pengumpulan = \App\Models\PengumpulanTugas::findOrFail($pengumpulan_id);
+        
+        $pengumpulan->update([
+            'nilai' => $request->nilai,
+            'catatan_guru' => $request->catatan_guru
+        ]);
+
+        return back()->with('success', 'Nilai berhasil disimpan!');
+    }
+
     public function destroy($id)
     {
         $tugas = Tugas::findOrFail($id);

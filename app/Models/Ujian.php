@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ujian extends Model
 {
-    protected $fillable = ['guru_mapel_id', 'judul', 'durasi', 'mulai', 'selesai'];
+    protected $fillable = ['guru_mapel_id', 'judul', 'durasi', 'mulai', 'selesai', 'is_published'];
     protected $casts = ['mulai' => 'datetime', 'selesai' => 'datetime'];
 
     public function soals() { 

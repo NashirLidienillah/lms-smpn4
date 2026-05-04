@@ -128,6 +128,13 @@
                         <h4 class="font-bold text-gray-800 text-lg">{{ $t->judul }}</h4>
                         <span class="text-xs font-bold text-red-600"><i class="fas fa-clock mr-1"></i> Deadline: {{ $t->batas_waktu->format('d M Y, H:i') }}</span>
                         <p class="text-gray-500 text-sm mt-2">{{ $t->deskripsi }}</p>
+                        
+                        {{-- TOMBOL KOREKSI TUGAS DITAMBAHKAN DI SINI --}}
+                        <div class="mt-3">
+                            <a href="/guru/tugas/{{ $t->id }}/koreksi" class="inline-block bg-purple-500 hover:bg-purple-600 text-white text-xs font-bold px-4 py-2 rounded shadow-sm transition">
+                                <i class="fas fa-check-double mr-1"></i> Koreksi & Nilai Jawaban
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -176,11 +183,25 @@
                             <span><i class="fas fa-stopwatch text-emerald-500 mr-1"></i> {{ $ujian->durasi }} Menit</span>
                             <span><i class="far fa-calendar-check text-blue-500 mr-1"></i> Buka: {{ $ujian->mulai->format('d M, H:i') }}</span>
                         </div>
-                        <div class="mt-3">
+                        <div class="mt-3 flex items-center space-x-2">
                             <a href="/guru/ujian/{{ $ujian->id }}" class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded shadow-sm transition">
                                 <i class="fas fa-list-ol mr-1"></i> Kelola Pertanyaan
                             </a>
-                            <span class="text-xs text-gray-400 ml-2 font-bold">{{ $ujian->soals->count() ?? 0 }} Soal dibuat</span>
+                            <span class="text-xs text-gray-400 font-bold border-r pr-2">{{ $ujian->soals->count() ?? 0 }} Soal</span>
+                            
+                            {{-- TOMBOL PUBLISH/DRAFT --}}
+                            <form action="/guru/ujian/{{ $ujian->id }}/publish" method="POST" class="inline-block">
+                                @csrf @method('PATCH')
+                                @if($ujian->is_published)
+                                    <button type="submit" class="bg-blue-100 text-blue-700 hover:bg-blue-200 text-xs font-bold px-3 py-1.5 rounded transition">
+                                        <i class="fas fa-eye mr-1"></i> Dibagikan (Klik untuk Tarik)
+                                    </button>
+                                @else
+                                    <button type="submit" class="bg-orange-100 text-orange-700 hover:bg-orange-200 text-xs font-bold px-3 py-1.5 rounded transition">
+                                        <i class="fas fa-eye-slash mr-1"></i> Draft (Klik untuk Bagikan)
+                                    </button>
+                                @endif
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -217,7 +238,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Durasi Pengerjaan <span class="text-red-500">*</span></label>
                     <div class="relative">
-                        <input type="number" name="durasi" required min="5" placeholder="60" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 pr-16">
+                        <input type="number" name="durasi" required min="1" placeholder="60" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 pr-16">
                         <span class="absolute right-3 top-2.5 text-gray-400 text-sm font-bold">Menit</span>
                     </div>
                 </div>

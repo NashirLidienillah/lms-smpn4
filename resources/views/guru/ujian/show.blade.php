@@ -33,9 +33,17 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     
     <div class="lg:col-span-2 space-y-4">
-        <h3 class="font-bold text-gray-800 text-lg flex items-center mb-4">
+    {{-- Container Flex untuk menyandingkan Judul dan Tombol --}}
+    <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-gray-800 text-lg flex items-center">
             <i class="fas fa-clipboard-list text-emerald-500 mr-2"></i> Daftar Pertanyaan
         </h3>
+        
+        {{-- Tombol Lihat Rekap Nilai --}}
+        <a href="/guru/ujian/{{ $ujian->id }}/rekap" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm">
+            <i class="fas fa-chart-bar mr-2"></i> Lihat Rekap Nilai Siswa
+        </a>
+    </div>
 
         @forelse($ujian->soals as $index => $soal)
             <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-200 relative hover:shadow-md transition">

@@ -45,30 +45,50 @@ class UjianController extends Controller
      * Menyimpan seluruh jawaban siswa dan menghitung skor
      */
     public function simpanJawaban(Request $request, $id)
-    {
-        $user_id = Auth::id();
-        $jawabanSiswa = $request->input('jawaban'); // Array dari radio button
+{
+    $user_id = \Illuminate\Support\Facades\Auth::id();
+    $jawabanSiswa = $request->input('jawaban'); 
 
-        if (!$jawabanSiswa) {
-            return back()->with('error', 'Anda belum memilih jawaban apapun!');
-        }
-
-        foreach ($jawabanSiswa as $soal_id => $pilihan) {
-            $soal = Soal::find($soal_id);
-            
-            // Logika hitung benar/salah
-            // Pastikan di tabel soals ada kolom 'jawaban_benar' (A, B, C, D, atau E)
-            $is_benar = ($soal->jawaban_benar == $pilihan);
-
-            JawabanUjian::create([
-                'user_id' => $user_id,
-                'ujian_id' => $id,
-                'soal_id' => $soal_id,
-                'jawaban_terpilih' => $pilihan,
-                'is_benar' => $is_benar
-            ]);
-        }
-
-        return redirect('/siswa/dashboard')->with('success', 'Ujian berhasil dikirim! Jawaban Anda telah tersimpan.');
+    if (!$jawabanSiswa) {
+        return back()->with('error', 'Anda belum memilih jawaban apapun!');
     }
+
+    foreach ($jawabanSiswa as $soal_id => $pilihan) {
+        $soal = \App\Models\Soal::find($soal_id);
+        
+        // GANTI 'jawaban_benar' MENJADI 'kunci_jawaban'
+        // Gunakan strtoupper untuk jaga-jaga jika ada perbedaan huruf besar/kecil
+        $is_benar = (strtoupper($soal->kunci_jawaban) == strtoupper($pilihan));
+
+        \App\Models\JawabanUjian::create([
+            'user_id' => $user_id,
+            'ujian_id' => $id,
+            'soal_id' => $soal_id,
+            'jawaban_terpilih' => $pilihan,
+            'is_benar' => $is_benar
+        ]);
+    }
+
+    return redirect('/siswa/ujian/' . $id . '/hasil');
+}
+
+    public function hasil($id)
+{
+    $ujian = Ujian::with('soals')->findOrFail($id);
+    $user_id = \Illuminate\Support\Facades\Auth::id();
+
+    // Ambil semua jawaban siswa untuk ujian ini
+    $jawabanSiswa = JawabanUjian::where('user_id', $user_id)
+                                ->where('ujian_id', $id)
+                                ->get();
+
+    // Hitung skor
+    $totalSoal = $ujian->soals->count();
+    $jawabanBenar = $jawabanSiswa->where('is_benar', true)->count();
+    
+    // Rumus nilai: (Benar / Total) * 100
+    $nilai = ($totalSoal > 0) ? round(($jawabanBenar / $totalSoal) * 100, 2) : 0;
+
+    return view('siswa.ujian.hasil', compact('ujian', 'jawabanBenar', 'totalSoal', 'nilai'));
+}
 }

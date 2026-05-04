@@ -12,13 +12,13 @@ class PengumpulanTugas extends Model
         'tugas_id', 'siswa_id', 'file_jawaban', 'catatan_siswa', 'nilai', 'catatan_guru'
     ];
 
-    public function tugas()
-    {
-        return $this->belongsTo(Tugas::class);
-    }
-
     public function siswa()
     {
         return $this->belongsTo(User::class, 'siswa_id');
+    }
+
+    public function tugas()
+    {
+        return $this->belongsTo(Tugas::class);
     }
 }

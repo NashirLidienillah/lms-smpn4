@@ -23,7 +23,7 @@
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Durasi Pengerjaan <span class="text-red-500">*</span></label>
                 <div class="relative">
-                    <input type="number" name="durasi" value="{{ $ujian->durasi }}" required min="5" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 pr-16 focus:ring-emerald-500 focus:border-emerald-500">
+                    <input type="number" name="durasi" value="{{ $ujian->durasi }}" required min="1" class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 pr-16 focus:ring-emerald-500 focus:border-emerald-500">
                     <span class="absolute right-3 top-2.5 text-gray-400 text-sm font-bold">Menit</span>
                 </div>
             </div>

@@ -75,17 +75,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/tugas/{id}/edit', [TugasController::class, 'edit']);
     Route::put('/guru/tugas/{id}', [TugasController::class, 'update']);
     Route::delete('/guru/tugas/{id}', [TugasController::class, 'destroy']);
+    // Rute Koreksi Tugas & Simpan Nilai
+    Route::get('/guru/tugas/{id}/koreksi', [TugasController::class, 'koreksi']);
+    Route::post('/guru/tugas/nilai/{pengumpulan_id}', [TugasController::class, 'simpanNilai']);
     // Rute Ujian CBT
     Route::post('/guru/kelas/{id}/ujian', [UjianController::class, 'store']);
-    Route::get('/guru/ujian/{id}/edit', [UjianController::class, 'edit']); // BARU
+    Route::get('/guru/ujian/{id}/edit', [UjianController::class, 'edit']);
     Route::put('/guru/ujian/{id}', [UjianController::class, 'update']);
     Route::delete('/guru/ujian/{id}', [UjianController::class, 'destroy']);
+    // ini rute publish soal cbt
+    Route::patch('/guru/ujian/{id}/publish', [\App\Http\Controllers\Guru\UjianController::class, 'togglePublish']);
     // Rute Kelola Soal CBT
     Route::get('/guru/ujian/{id}', [UjianController::class, 'show']);
     Route::post('/guru/ujian/{id}/soal', [SoalController::class, 'store']);
     Route::get('/guru/soal/{id}/edit', [SoalController::class, 'edit']);
     Route::put('/guru/soal/{id}', [SoalController::class, 'update']);
     Route::delete('/guru/soal/{id}', [SoalController::class, 'destroy']);
+    // Rute rekap nilai
+    Route::get('/guru/ujian/{id}/rekap', [UjianController::class, 'rekapNilai']);
+    
     });
 
     // Khusus Siswa
@@ -93,9 +101,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/siswa/dashboard', [SiswaDashboard::class, 'index']);
     Route::get('/siswa/kelas/{id}', [SiswaKelas::class, 'show']);
     Route::get('/siswa/tugas/{id}', [SiswaTugas::class, 'show']);
-    Route::post('/siswa/tugas/{id}/submit', [SiswaTugas::class, 'submit']);
+    Route::post('/siswa/tugas/{id}/kumpul', [SiswaTugas::class, 'kumpulTugas']);
     Route::get('/siswa/ujian/{id}', [SiswaUjian::class, 'show']);
     Route::get('/siswa/ujian/{id}/kerjakan', [SiswaUjian::class, 'kerjakan']);
+    Route::post('/siswa/ujian/{id}/simpan', [SiswaUjian::class, 'simpanJawaban']);
+    Route::get('/siswa/ujian/{id}/hasil', [SiswaUjian::class, 'hasil']);
     });
 
 });

@@ -60,4 +60,32 @@ class UjianController extends Controller
         Ujian::findOrFail($id)->delete();
         return back()->with('success', 'Ujian beserta semua soalnya berhasil dihapus!');
     }
+
+    public function rekapNilai($id)
+    {
+        $ujian = \App\Models\Ujian::with('soals')->findOrFail($id);
+        // Ambil semua jawaban siswa yang sudah mengerjakan ujian ini
+        $rekap = \App\Models\JawabanUjian::with('user')
+                    ->where('ujian_id', $id)
+                    ->get()
+                    ->groupBy('user_id');
+
+        return view('guru.ujian.rekap', compact('ujian', 'rekap'));
+    }
+
+    public function togglePublish($id)
+    {
+        $ujian = \App\Models\Ujian::findOrFail($id);
+        
+        // Validasi: Jangan izinkan publish kalau soal masih 0
+        if (!$ujian->is_published && $ujian->soals()->count() == 0) {
+            return back()->withErrors(['Tidak bisa membagikan Ujian. Silakan buat minimal 1 pertanyaan terlebih dahulu!']);
+        }
+
+        // Balikkan statusnya (kalau 0 jadi 1, kalau 1 jadi 0)
+        $ujian->update(['is_published' => !$ujian->is_published]);
+
+        $pesan = $ujian->is_published ? 'Ujian CBT berhasil dibagikan ke siswa!' : 'Ujian CBT ditarik kembali ke Draft.';
+        return back()->with('success', $pesan);
+    }
 }
