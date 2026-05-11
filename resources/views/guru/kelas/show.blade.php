@@ -27,9 +27,15 @@
     </div>
 @endif
 
-<a href="/guru/dashboard" class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 transition mb-4 font-medium">
-    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
-</a>
+<div class="flex justify-between items-center mb-4">
+    <a href="/guru/dashboard" class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 transition font-medium">
+        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
+    </a>
+
+    <a href="/guru/kelas/{{ $jadwal->id }}/rekap-nilai" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-4 py-2 rounded-lg shadow-md transition">
+        <i class="fas fa-book mr-1"></i> Rekap Nilai Kelas
+    </a>
+</div>
 
 <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
     <div class="absolute left-0 top-0 h-full w-2 bg-blue-500"></div>
@@ -128,8 +134,6 @@
                         <h4 class="font-bold text-gray-800 text-lg">{{ $t->judul }}</h4>
                         <span class="text-xs font-bold text-red-600"><i class="fas fa-clock mr-1"></i> Deadline: {{ $t->batas_waktu->format('d M Y, H:i') }}</span>
                         <p class="text-gray-500 text-sm mt-2">{{ $t->deskripsi }}</p>
-                        
-                        {{-- TOMBOL KOREKSI TUGAS DITAMBAHKAN DI SINI --}}
                         <div class="mt-3">
                             <a href="/guru/tugas/{{ $t->id }}/koreksi" class="inline-block bg-purple-500 hover:bg-purple-600 text-white text-xs font-bold px-4 py-2 rounded shadow-sm transition">
                                 <i class="fas fa-check-double mr-1"></i> Koreksi & Nilai Jawaban

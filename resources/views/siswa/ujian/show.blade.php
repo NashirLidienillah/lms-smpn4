@@ -9,9 +9,9 @@
         </div>
         
         <div class="p-8">
-            {{-- Alert Jika Sudah Mengerjakan (Pencegahan Visual) --}}
+            {{-- Cek Hasil Ujian Langsung dari Database --}}
             @php
-                $sudah = \App\Models\JawabanUjian::where('user_id', auth()->id())->where('ujian_id', $ujian->id)->exists();
+                $hasil = \App\Models\HasilUjian::where('siswa_id', auth()->id())->where('ujian_id', $ujian->id)->first();
             @endphp
 
             <div class="grid grid-cols-2 gap-6 mb-8">
@@ -35,15 +35,40 @@
             </div>
 
             <div class="flex flex-col space-y-3">
-                @if($sudah)
-                    <div class="bg-red-100 text-red-700 p-4 rounded-xl text-center font-bold">
-                        <i class="fas fa-check-double mr-2"></i> Anda sudah mengerjakan ujian ini.
+                @if($hasil)
+                    {{-- Tampilan Jika Sudah Mengerjakan (Menampilkan Nilai & Statistik Langsung) --}}
+                    <div class="bg-blue-50 border border-blue-200 p-6 rounded-xl text-center shadow-inner">
+                        <i class="fas fa-check-circle text-green-500 text-5xl mb-3"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-1">Sudah Dikerjakan</h3>
+                        <p class="text-sm text-gray-600 mb-6">Anda telah menyelesaikan soal pilihan ganda ini.</p>
+                        
+                        <div class="mb-6 bg-white py-5 px-8 rounded-xl border border-blue-100 shadow-sm inline-block w-full sm:w-auto">
+                            <span class="block text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Nilai Akhir Anda</span>
+                            <span class="text-6xl font-black {{ $hasil->nilai >= 75 ? 'text-green-600' : 'text-red-500' }} block mb-4">
+                                {{ $hasil->nilai }}
+                            </span>
+                            
+                            {{-- Baris Statistik Benar Salah --}}
+                            <div class="flex justify-center gap-8 border-t border-gray-100 pt-4 mt-2">
+                                <div>
+                                    <span class="block text-xs text-gray-500 uppercase font-semibold mb-1">Benar</span>
+                                    <span class="text-2xl font-bold text-emerald-500">{{ $hasil->jumlah_benar }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-xs text-gray-500 uppercase font-semibold mb-1">Salah</span>
+                                    <span class="text-2xl font-bold text-red-500">{{ $hasil->jumlah_salah }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <a href="/siswa/dashboard" class="inline-flex items-center justify-center w-full sm:w-auto bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-md">
+                                <i class="fas fa-arrow-left mr-2"></i> KEMBALI KE DASHBOARD
+                            </a>
+                        </div>
                     </div>
-                    <a href="/siswa/dashboard" class="text-center text-blue-600 hover:underline text-sm font-medium">
-                        Kembali ke Dashboard
-                    </a>
                 @else
-                    {{-- Tombol diubah menjadi Link (a) agar bisa diklik menuju route kerjakan --}}
+                    {{-- Tampilan Jika Belum Mengerjakan --}}
                     <a href="/siswa/ujian/{{ $ujian->id }}/kerjakan" 
                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center font-bold py-4 rounded-xl transition shadow-lg text-lg">
                         MULAI KERJAKAN SEKARANG

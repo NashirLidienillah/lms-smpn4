@@ -14,11 +14,13 @@ use App\Http\Controllers\Guru\MateriController;
 use App\Http\Controllers\Guru\TugasController;
 use App\Http\Controllers\Guru\UjianController;
 use App\Http\Controllers\Guru\SoalController;
+use App\Http\Controllers\Guru\RekapNilaiController;
 
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboard;
 use App\Http\Controllers\Siswa\KelasController as SiswaKelas;
 use App\Http\Controllers\Siswa\TugasController as SiswaTugas;
 use App\Http\Controllers\Siswa\UjianController as SiswaUjian;
+use App\Http\Controllers\Siswa\TranskripController;
 
 // Halaman Login
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -93,7 +95,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/guru/soal/{id}', [SoalController::class, 'destroy']);
     // Rute rekap nilai
     Route::get('/guru/ujian/{id}/rekap', [UjianController::class, 'rekapNilai']);
-    
+    // Rute Buku Nilai Global
+    Route::get('/guru/kelas/{id}/rekap-nilai', [RekapNilaiController::class, 'index']);
     });
 
     // Khusus Siswa
@@ -106,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/siswa/ujian/{id}/kerjakan', [SiswaUjian::class, 'kerjakan']);
     Route::post('/siswa/ujian/{id}/simpan', [SiswaUjian::class, 'simpanJawaban']);
     Route::get('/siswa/ujian/{id}/hasil', [SiswaUjian::class, 'hasil']);
+    Route::get('/siswa/transkrip', [TranskripController::class, 'transkrip'])->name('siswa.transkrip');
     });
 
 });

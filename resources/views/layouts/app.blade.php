@@ -31,7 +31,7 @@
                     <i class="fas fa-chalkboard mr-2"></i> Data Kelas
                 </a>
                 <a href="/admin/mapel" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
-                    <i class="fas fa-book-open mr-2"></i> Data Mapel
+                    <i class="fas fa-book-open mr-2"></i> Data Mata Pelajaran
                 </a>
                 <a href="/admin/rombel" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
                     <i class="fas fa-users-cog mr-2"></i> Rombongan Belajar
@@ -50,8 +50,8 @@
                 <a href="/siswa/dashboard" class="block py-2.5 px-4 rounded transition {{ Request::is('siswa/dashboard*') ? 'bg-blue-700' : 'hover:bg-blue-700' }}">
                     <i class="fas fa-home mr-2"></i> Dashboard Siswa
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition hover:bg-blue-700">
-                    <i class="fas fa-tasks mr-2"></i> Tugas Saya
+                <a href="{{ route('siswa.transkrip') }}" class="block py-2.5 px-4 rounded transition {{ Request::is('siswa/transkrip*') ? 'bg-blue-700' : 'hover:bg-blue-700' }}">
+                    <i class="fas fa-chart-line mr-2"></i> Transkrip Nilai
                 </a>
             @endif
         </nav>
