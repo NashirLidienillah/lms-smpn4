@@ -32,7 +32,20 @@ Route::middleware(['auth'])->group(function () {
     
     // Khusus Admin
     Route::middleware('role:admin')->group(function () {
-        Route::get('/admin/dashboard', function () { return view('admin.dashboard'); });
+    Route::get('/admin/dashboard', function () { 
+    // Hitung total user berdasarkan role
+    $totalSiswa = \App\Models\User::where('role', 'siswa')->count();
+    $totalGuru  = \App\Models\User::where('role', 'guru')->count();
+    // Hitung total kelas dan mapel
+    $totalKelas = \App\Models\Kelas::count();
+    $totalMapel = \App\Models\Mapel::count();
+    $tahunAktif = \App\Models\TahunAkademik::where('status_aktif', 1)->first();
+
+    return view('admin.dashboard', compact(
+        'totalSiswa', 'totalGuru', 'totalKelas', 'totalMapel', 'tahunAktif'
+    )); 
+});
+
         // route buat kelola user
         Route::get('/admin/users', [UserController::class, 'index']);
         Route::get('/admin/users/create', [UserController::class, 'create']);

@@ -2,72 +2,115 @@
 
 @section('content')
 
-<div class="mb-6 bg-gradient-to-r from-blue-700 to-blue-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
-    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full blur-2xl"></div>
-    <div class="absolute bottom-0 right-20 w-24 h-24 bg-blue-400 opacity-20 rounded-full blur-xl"></div>
-    
-    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center">
-        <div>
-            <h2 class="text-3xl font-bold mb-2">Selamat Datang, {{ Auth::user()->name }}! 👏</h2>
-            <p class="text-blue-100">Selamat bekerja dan mendidik generasi bangsa hari ini.</p>
+<div class="space-y-8">
+    <div class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 md:p-10 text-white shadow-xl">
+        <div class="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-blue-400/20 rounded-full blur-2xl"></div>
+        
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight">Selamat Datang, {{ Auth::user()->name }}! 👋</h2>
+                <p class="text-blue-100 text-lg font-medium opacity-90">Senang melihat Anda kembali. Mari mendidik generasi bangsa hari ini.</p>
+            </div>
+            
+            <div class="shrink-0">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-inner text-center md:text-right">
+                    <span class="block text-[10px] text-blue-200 mb-1 uppercase tracking-[0.2em] font-black">Tahun Akademik Aktif</span>
+                    <div class="flex items-center justify-center md:justify-end gap-2 text-white">
+                        <i class="fas fa-calendar-check text-blue-300"></i>
+                        @if($tahunAktif)
+                            <span class="font-bold text-sm">{{ $tahunAktif->nama_tahun }} <span class="mx-1 opacity-50">•</span> {{ $tahunAktif->semester }}</span>
+                        @else
+                            <span class="font-bold text-sm text-yellow-300">Belum Diatur Admin</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mt-4 md:mt-0 text-right">
-            <span class="block text-xs text-blue-200 mb-1 uppercase tracking-wider font-bold">Tahun Akademik</span>
-            <span class="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm inline-block">
-                @if($tahunAktif)
-                    <i class="fas fa-calendar-alt mr-2"></i> {{ $tahunAktif->nama_tahun }} ({{ $tahunAktif->semester }})
-                @else
-                    <i class="fas fa-exclamation-triangle text-yellow-300 mr-2"></i> Belum Diatur
-                @endif
-            </span>
+    </div>
+
+    <div>
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                Jadwal Mengajar Anda
+            </h3>
+            @if($tahunAktif && count($jadwalMengajar) > 0)
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ count($jadwalMengajar) }} Kelas Terdaftar</span>
+            @endif
+        </div>
+
+        @if(!$tahunAktif)
+            <div class="bg-amber-50 border border-amber-200 p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center shrink-0">
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-amber-900">Tahun Akademik Belum Aktif</h4>
+                    <p class="text-amber-700 text-sm leading-relaxed mt-1">Admin sekolah belum mengaktifkan periode akademik. Anda akan dapat melihat jadwal mengajar setelah admin melakukan pengaturan di sisi Master Data.</p>
+                </div>
+            </div>
+
+        @elseif(count($jadwalMengajar) > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($jadwalMengajar as $jadwal)
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="space-y-1">
+                            <span class="inline-block bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-blue-100">
+                                {{ $jadwal->hari }}
+                            </span>
+                            <div class="flex items-center gap-2 text-gray-400 text-xs font-medium">
+                                <i class="far fa-clock"></i>
+                                {{ substr($jadwal->jam_mulai, 0, 5) }} - {{ substr($jadwal->jam_selesai, 0, 5) }} WIB
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 bg-gray-50 group-hover:bg-blue-600 group-hover:text-white text-gray-400 rounded-2xl flex flex-col items-center justify-center transition-colors duration-300 border border-gray-100 group-hover:border-blue-500">
+                            <span class="text-[9px] font-black uppercase opacity-60">Kelas</span>
+                            <span class="text-lg font-bold leading-none">{{ $jadwal->kelas->nama_kelas }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-xl font-bold text-gray-800 leading-tight group-hover:text-blue-700 transition-colors">{{ $jadwal->mapel->nama_mapel }}</h4>
+                        <p class="text-xs text-gray-400 mt-1">Pusat Pembelajaran Digital SMPN 4 Serang</p>
+                    </div>
+                    
+                    <a href="/guru/kelas/{{ $jadwal->id }}" class="flex items-center justify-center gap-2 w-full bg-gray-50 group-hover:bg-blue-600 text-gray-600 group-hover:text-white py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 border border-gray-100 group-hover:border-blue-500 group-hover:shadow-lg group-hover:shadow-blue-200">
+                        Masuk Ruang Kelas
+                        <i class="fas fa-chevron-right text-[10px] transform group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+                @endforeach
+            </div>
+
+        @else
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-16 text-center">
+                <div class="w-24 h-24 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner">
+                    <i class="fas fa-mug-hot"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Jadwal</h3>
+                <p class="text-gray-500 text-sm max-w-xs mx-auto leading-relaxed">Saat ini Anda belum memiliki jadwal mengajar yang terdaftar. Silakan hubungi bagian Kurikulum atau Admin sekolah.</p>
+            </div>
+        @endif
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-emerald-50 border border-emerald-100 p-6 rounded-3xl">
+            <h5 class="text-emerald-900 font-bold flex items-center gap-2 mb-2">
+                <i class="fas fa-lightbulb"></i> Tips Mengajar Online
+            </h5>
+            <p class="text-emerald-700 text-xs leading-relaxed">Berikan materi dalam bentuk PDF atau Video yang menarik agar siswa lebih mudah memahami pembelajaran di luar jam sekolah.</p>
+        </div>
+        <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-3xl">
+            <h5 class="text-indigo-900 font-bold flex items-center gap-2 mb-2">
+                <i class="fas fa-info-circle"></i> Info Update
+            </h5>
+            <p class="text-indigo-700 text-xs leading-relaxed">Sekarang Anda bisa melakukan koreksi tugas secara langsung melalui menu Tugas di dalam masing-masing Ruang Kelas.</p>
         </div>
     </div>
 </div>
-
-<h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-clipboard-list text-blue-600 mr-2"></i> Jadwal Mengajar Anda</h3>
-
-@if(!$tahunAktif)
-    <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-xl flex items-center">
-        <i class="fas fa-info-circle text-2xl mr-3"></i>
-        <p>Tahun Akademik saat ini belum diaktifkan oleh Admin. Anda tidak dapat melihat jadwal.</p>
-    </div>
-@elseif(count($jadwalMengajar) > 0)
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        @foreach($jadwalMengajar as $jadwal)
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
-            <div class="absolute left-0 top-0 w-1 h-full bg-blue-500 group-hover:w-2 transition-all duration-300"></div>
-            
-            <div class="flex justify-between items-start mb-3 pl-2">
-                <div>
-                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-md">{{ $jadwal->hari }}</span>
-                    <p class="text-sm text-gray-500 mt-2 font-medium">
-                        <i class="far fa-clock mr-1"></i> {{ substr($jadwal->jam_mulai, 0, 5) }} - {{ substr($jadwal->jam_selesai, 0, 5) }} WIB
-                    </p>
-                </div>
-                <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 text-center min-w-[3rem]">
-                    <span class="block text-xs text-gray-400 font-bold uppercase">Kelas</span>
-                    <span class="block text-lg font-bold text-gray-800">{{ $jadwal->kelas->nama_kelas }}</span>
-                </div>
-            </div>
-            
-            <div class="pl-2">
-                <h4 class="text-lg font-bold text-gray-800 mb-1">{{ $jadwal->mapel->nama_mapel }}</h4>
-                
-                <a href="/guru/kelas/{{ $jadwal->id }}" class="mt-4 block w-full bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 border border-gray-200 hover:border-blue-200 text-center py-2.5 rounded-lg text-sm font-semibold transition">
-                    Masuk Kelas <i class="fas fa-arrow-right ml-1"></i>
-                </a>
-            </div>
-        </div>
-        @endforeach
-    </div>
-@else
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-        <div class="w-20 h-20 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
-            <i class="fas fa-mug-hot"></i>
-        </div>
-        <h3 class="text-lg font-bold text-gray-700 mb-1">Jadwal Kosong</h3>
-        <p class="text-gray-500 text-sm">Anda belum memiliki jadwal mengajar pada tahun akademik ini.</p>
-    </div>
-@endif
 
 @endsection

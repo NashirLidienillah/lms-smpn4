@@ -1,127 +1,150 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Alpine JS untuk Tab -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<div class="mb-6">
-    <a href="/siswa/dashboard" class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 transition mb-4 font-medium">
-        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Dashboard
-    </a>
-    
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
-        <div class="relative z-10">
-            <h1 class="text-3xl font-bold mb-2">{{ $jadwal->mapel->nama_mapel }}</h1>
-            <p class="text-blue-100 italic"><i class="fas fa-chalkboard-teacher mr-2"></i> Guru Pengajar: {{ $jadwal->user->name }}</p>
+<div class="space-y-6">
+    <div class="flex flex-col gap-4">
+        <a href="/siswa/dashboard" class="group inline-flex items-center text-sm font-bold text-gray-400 hover:text-blue-600 transition">
+            <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-50 flex items-center justify-center mr-3 transition">
+                <i class="fas fa-arrow-left text-xs"></i>
+            </div>
+            Kembali ke Dashboard
+        </a>
+        
+        <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[2rem] p-8 md:p-10 text-white shadow-xl relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="bg-white/20 backdrop-blur-md text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/30">Ruang Belajar</span>
+                    <span class="text-blue-200 opacity-50">•</span>
+                    <span class="text-sm font-bold text-blue-100">Siswa Aktif</span>
+                </div>
+                <h1 class="text-3xl md:text-5xl font-black mb-2 tracking-tight">{{ $jadwal->mapel->nama_mapel }}</h1>
+                <div class="flex items-center gap-2 text-blue-100 font-medium opacity-90">
+                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                        <i class="fas fa-user-tie text-xs"></i>
+                    </div>
+                    <span>{{ $jadwal->user->name }}</span>
+                </div>
+            </div>
+            <i class="fas fa-book-reader absolute right-10 bottom-4 text-white opacity-5 text-9xl hidden md:block"></i>
         </div>
-        <i class="fas fa-book-reader absolute right-8 bottom-4 text-white opacity-10 text-9xl"></i>
-    </div>
-</div>
-
-<div x-data="{ tab: 'materi' }" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-    <!-- Header Tab -->
-    <div class="flex border-b border-gray-200 bg-gray-50">
-        <button @click="tab = 'materi'" :class="tab === 'materi' ? 'border-b-2 border-blue-500 text-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-4 px-6 text-center font-bold text-sm transition focus:outline-none">
-            <i class="fas fa-book-open mr-2"></i> Materi
-        </button>
-        <button @click="tab = 'tugas'" :class="tab === 'tugas' ? 'border-b-2 border-blue-500 text-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-4 px-6 text-center font-bold text-sm transition focus:outline-none">
-            <i class="fas fa-tasks mr-2"></i> Tugas Esai
-        </button>
-        <button @click="tab = 'ujian'" :class="tab === 'ujian' ? 'border-b-2 border-blue-500 text-blue-600 bg-white' : 'text-gray-500 hover:text-gray-700'" class="flex-1 py-4 px-6 text-center font-bold text-sm transition focus:outline-none">
-            <i class="fas fa-laptop-code mr-2"></i> Ujian CBT
-        </button>
     </div>
 
-<!-- Tab Materi -->
-<div x-show="tab === 'materi'" class="p-6">
-    @forelse($materis as $materi)
-        <div class="border border-gray-100 rounded-xl p-5 mb-4 hover:shadow-md transition bg-white">
-            <div class="flex justify-between items-start">
-                <div class="flex-1">
-                    <h3 class="text-lg font-bold text-gray-800 mb-1">{{ $materi->judul }}</h3>
-                    <p class="text-sm text-gray-600 mb-4">{{ $materi->deskripsi }}</p>
+    <div x-data="{ tab: 'materi' }" class="space-y-6">
+        <div class="bg-gray-100/50 p-1.5 rounded-2xl flex flex-wrap gap-1 shadow-inner border border-gray-200/50">
+            <button @click="tab = 'materi'" :class="tab === 'materi' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'text-gray-400 hover:bg-gray-100'" 
+                class="flex-1 min-w-[100px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fas fa-book-open"></i> Materi
+            </button>
+            <button @click="tab = 'tugas'" :class="tab === 'tugas' ? 'bg-purple-600 text-white shadow-lg shadow-purple-100' : 'text-gray-400 hover:bg-gray-100'" 
+                class="flex-1 min-w-[100px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fas fa-tasks"></i> Tugas
+            </button>
+            <button @click="tab = 'ujian'" :class="tab === 'ujian' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100' : 'text-gray-400 hover:bg-gray-100'" 
+                class="flex-1 min-w-[100px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fas fa-vial"></i> Ujian CBT
+            </button>
+        </div>
+
+        <div x-show="tab === 'materi'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @forelse($materis as $materi)
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 transition-transform group-hover:rotate-6 {{ !empty($materi->file_path) ? 'bg-orange-50 text-orange-500' : 'bg-red-50 text-red-500' }}">
+                            <i class="fas {{ !empty($materi->file_path) ? 'fa-file-pdf' : 'fa-play-circle' }}"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">{{ $materi->created_at->format('d M Y') }}</span>
+                            <h3 class="text-lg font-black text-gray-800 leading-tight group-hover:text-blue-600 transition-colors">{{ $materi->judul }}</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-2">{{ $materi->deskripsi ?? 'Klik untuk mempelajari materi ini.' }}</p>
                     
-                    <div class="flex flex-wrap gap-2">
-                        {{-- CEK FILE: Menggunakan kolom file_path --}}
+                    <div class="flex flex-wrap gap-2 mt-auto">
                         @if(!empty($materi->file_path))
-                            <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-orange-100 text-orange-700 rounded-lg text-sm font-bold hover:bg-orange-600 hover:text-white transition shadow-sm">
-                                <i class="fas fa-file-pdf mr-2"></i> Buka File Materi
+                            <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-orange-50 text-orange-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all border border-orange-100">
+                                <i class="fas fa-file-download mr-2"></i> Buka Materi
                             </a>
                         @endif
-
-                        {{-- CEK VIDEO: Menggunakan kolom url_youtube --}}
                         @if(!empty($materi->url_youtube))
-                            <a href="{{ $materi->url_youtube }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-bold hover:bg-red-600 hover:text-white transition shadow-sm">
+                            <a href="{{ $materi->url_youtube }}" target="_blank" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all border border-red-100">
                                 <i class="fab fa-youtube mr-2"></i> Tonton Video
                             </a>
                         @endif
-
-                        {{-- Jika Keduanya Kosong --}}
-                        @if(empty($materi->file_path) && empty($materi->url_youtube))
-                            <span class="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200 italic">
-                                <i class="fas fa-info-circle mr-1"></i> Materi Teks Saja
-                            </span>
-                        @endif
                     </div>
                 </div>
-                <div class="text-right">
-                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest block">{{ $materi->created_at->format('d M Y') }}</span>
-                </div>
-            </div>
-        </div>
-    @empty
-        <div class="text-center py-10">
-            <i class="fas fa-folder-open text-gray-300 text-5xl mb-3"></i>
-            <p class="text-gray-400 italic">Belum ada materi pelajaran.</p>
-        </div>
-    @endforelse
-</div>
-
-    <!-- Tab Tugas -->
-    <div x-show="tab === 'tugas'" class="p-6" style="display:none">
-        @forelse($tugass as $tugas)
-            <div class="border border-gray-100 rounded-xl p-5 mb-4 bg-amber-50/20 hover:border-amber-200 transition">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-lg font-bold text-gray-800">{{ $tugas->judul }}</h3>
-                    <span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">
-                        Deadline: {{ \Carbon\Carbon::parse($tugas->batas_waktu)->format('d M, H:i') }}
-                    </span>
-                </div>
-                <p class="text-sm text-gray-600 mb-4">{{ Str::limit($tugas->deskripsi, 150) }}</p>
-                <a href="/siswa/tugas/{{ $tugas->id }}" class="inline-flex items-center px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-bold hover:bg-amber-600 shadow-sm transition">
-                    Kerjakan Tugas <i class="fas fa-external-link-alt ml-2 text-xs"></i>
-                </a>
-            </div>
-        @empty
-            <div class="text-center py-10">
-                <i class="fas fa-clipboard-list text-gray-300 text-5xl mb-3"></i>
-                <p class="text-gray-400 italic">Tidak ada tugas untuk saat ini.</p>
-            </div>
-        @endforelse
-    </div>
-
-    <!-- Tab Ujian -->
-    <div x-show="tab === 'ujian'" class="p-6" style="display:none">
-        @forelse($ujians as $ujian)
-            <div class="border border-gray-100 rounded-xl p-6 mb-4 flex flex-col md:flex-row justify-between items-center bg-white hover:border-emerald-200 transition shadow-sm">
-                <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h3 class="text-xl font-bold text-gray-800 mb-1">{{ $ujian->judul }}</h3>
-                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-gray-500 mt-2">
-                        <span><i class="fas fa-clock mr-1 text-emerald-500"></i> {{ $ujian->durasi }} Menit</span>
-                        <span><i class="fas fa-calendar-alt mr-1 text-blue-500"></i> {{ $ujian->mulai->format('d M Y') }}</span>
-                        <span><i class="fas fa-list-ol mr-1 text-purple-500"></i> {{ $ujian->soals->count() }} Soal</span>
+            @empty
+                <div class="col-span-full bg-white rounded-[2rem] border-2 border-dashed border-gray-100 p-16 text-center">
+                    <div class="w-16 h-16 bg-gray-50 text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                        <i class="fas fa-folder-open"></i>
                     </div>
+                    <h4 class="font-bold text-gray-400">Belum ada materi pelajaran.</h4>
                 </div>
-                <a href="/siswa/ujian/{{ $ujian->id }}" class="w-full md:w-auto bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-emerald-700 shadow-md transition text-center">
-                    <i class="fas fa-play mr-2 text-sm"></i> Ikuti Ujian
-                </a>
-            </div>
-        @empty
-            <div class="text-center py-10">
-                <i class="fas fa-laptop-house text-gray-300 text-5xl mb-3"></i>
-                <p class="text-gray-400 italic">Belum ada jadwal ujian CBT.</p>
-            </div>
-        @endforelse
+            @endforelse
+        </div>
+
+        <div x-show="tab === 'tugas'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" style="display:none" class="space-y-4">
+            @forelse($tugass as $tugas)
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6 group hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 h-full w-1.5 bg-purple-500"></div>
+                    <div class="flex items-center gap-5 w-full">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl shrink-0"><i class="fas fa-file-signature"></i></div>
+                        <div>
+                            <h3 class="text-xl font-black text-gray-800 tracking-tight">{{ $tugas->judul }}</h3>
+                            <div class="flex items-center gap-3 mt-1">
+                                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-1 bg-red-50 px-2 py-0.5 rounded">
+                                    <i class="fas fa-hourglass-half"></i> Deadline: {{ \Carbon\Carbon::parse($tugas->batas_waktu)->format('d M, H:i') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/siswa/tugas/{{ $tugas->id }}" class="w-full md:w-auto bg-purple-600 hover:bg-purple-700 text-white px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-purple-100 transition-all flex items-center justify-center gap-2">
+                        Kerjakan <i class="fas fa-chevron-right text-[10px]"></i>
+                    </a>
+                </div>
+            @empty
+                <div class="bg-white rounded-[2rem] border-2 border-dashed border-gray-100 p-16 text-center">
+                    <div class="w-16 h-16 bg-gray-50 text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-400">Santai dulu! Tidak ada tugas saat ini.</h4>
+                </div>
+            @endforelse
+        </div>
+
+        <div x-show="tab === 'ujian'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" style="display:none" class="space-y-4">
+            @forelse($ujians as $ujian)
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6 group hover:shadow-xl transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 h-full w-2 bg-emerald-500 group-hover:w-3 transition-all"></div>
+                    <div class="text-center md:text-left flex items-center gap-6">
+                        <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl shrink-0 shadow-inner rotate-3 group-hover:rotate-0 transition-transform">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black text-gray-800 tracking-tight">{{ $ujian->judul }}</h3>
+                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-[10px] font-black text-gray-400 uppercase tracking-widest mt-2">
+                                <span class="flex items-center gap-1.5"><i class="fas fa-stopwatch text-emerald-500"></i> {{ $ujian->durasi }} Menit</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-calendar-alt text-blue-500"></i> {{ $ujian->mulai->format('d M Y') }}</span>
+                                <span class="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{{ $ujian->soals->count() }} Soal</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/siswa/ujian/{{ $ujian->id }}" class="w-full md:w-auto bg-emerald-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2 group-hover:gap-4">
+                        Mulai Ujian <i class="fas fa-play text-[10px]"></i>
+                    </a>
+                </div>
+            @empty
+                <div class="bg-white rounded-[2rem] border-2 border-dashed border-gray-200 p-16 text-center">
+                    <div class="w-16 h-16 bg-gray-50 text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-400">Belum ada jadwal ujian CBT.</h4>
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
 @endsection
