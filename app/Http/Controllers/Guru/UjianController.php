@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ujian;
+use App\Models\HasilUjian;
 
 class UjianController extends Controller
 {
@@ -88,4 +89,17 @@ class UjianController extends Controller
         $pesan = $ujian->is_published ? 'Ujian CBT berhasil dibagikan ke siswa!' : 'Ujian CBT ditarik kembali ke Draft.';
         return back()->with('success', $pesan);
     }
+
+    public function bukaAkses($id)
+{
+    // Cari data pengerjaan siswa di tabel hasil_ujians
+    $hasil = HasilUjian::findOrFail($id);
+
+    // KITA BUTUH MEMASTIKAN NAMA KOLOM DI SINI
+    $hasil->update([
+        'status' => 'mengerjakan',
+    ]);
+
+    return redirect()->back()->with('success', 'Akses ujian siswa berhasil dibuka kembali!');
+}
 }

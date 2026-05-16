@@ -15,11 +15,11 @@ class UjianController extends Controller
     public function show($id)
     {
         $ujian = Ujian::with('soals')->findOrFail($id);
-        $user_id = \Illuminate\Support\Facades\Auth::id();
+        $user_id = Auth::id();
     
-        $hasil = \App\Models\HasilUjian::where('ujian_id', $id)
-                                       ->where('siswa_id', $user_id)
-                                       ->first();
+        $hasil = HasilUjian::where('ujian_id', $id)
+                           ->where('siswa_id', $user_id)
+                           ->first();
         
         return view('siswa.ujian.show', compact('ujian', 'hasil'));
     }
@@ -27,13 +27,31 @@ class UjianController extends Controller
     public function kerjakan($id)
     {
         $ujian = Ujian::with('soals')->findOrFail($id);
+        $user_id = Auth::id();
 
-        $sudahMengerjakan = JawabanUjian::where('user_id', Auth::id())
-                                        ->where('ujian_id', $id)
-                                        ->exists();
+        // --- LOGIKA BARU PENJAGA PINTU UJIAN ---
+        $hasil = HasilUjian::where('ujian_id', $id)->where('siswa_id', $user_id)->first();
 
-        if ($sudahMengerjakan) {
-            return redirect('/siswa/dashboard')->with('error', 'Anda sudah mengerjakan ujian ini sebelumnya.');
+        if ($hasil) {
+            // Kalau statusnya sudah selesai, tendang ke dashboard
+            if ($hasil->status === 'selesai') {
+                return redirect('/siswa/dashboard')->with('error', 'Anda sudah menyelesaikan ujian ini.');
+            }
+            // Kalau statusnya diblokir, tendang ke dashboard
+            if ($hasil->status === 'diblokir') {
+                return redirect('/siswa/dashboard')->with('error', 'Akses Anda diblokir. Hubungi Guru Mata Pelajaran.');
+            }
+            // JIKA STATUSNYA 'mengerjakan', biarkan dia lewat (berarti aksesnya baru dibuka guru atau memang lagi ujian)
+        } else {
+            // Jika belum ada record HasilUjian sama sekali (baru pertama kali klik mulai)
+            HasilUjian::create([
+                'ujian_id' => $id, 
+                'siswa_id' => $user_id,
+                'jumlah_benar' => 0, 
+                'jumlah_salah' => 0, 
+                'nilai' => 0, 
+                'status' => 'mengerjakan'
+            ]);
         }
 
         return view('siswa.ujian.kerjakan', compact('ujian'));
@@ -41,33 +59,32 @@ class UjianController extends Controller
 
     public function simpanJawaban(Request $request, $id)
     {
-        $user_id = \Illuminate\Support\Facades\Auth::id();
-        $jawabanSiswa = $request->input('jawaban'); 
-
-        if (!$jawabanSiswa) {
-            return back()->with('error', 'Anda belum memilih jawaban apapun!');
-        }
+        $user_id = Auth::id();
+        $jawabanSiswa = $request->input('jawaban') ?? []; 
+        
+        // Cek apakah ini force submit dari Anti-Cheat
+        $statusAkhir = $request->has('is_cheat') ? 'diblokir' : 'selesai';
 
         $jumlahBenar = 0;
-        $totalSoal = \App\Models\Soal::where('ujian_id', $id)->count();
+        $totalSoal = Soal::where('ujian_id', $id)->count();
 
-        foreach ($jawabanSiswa as $soal_id => $pilihan) {
-            $soal = \App\Models\Soal::find($soal_id);
-            
-            $is_benar = (strtoupper($soal->kunci_jawaban) == strtoupper($pilihan));
+        if (!empty($jawabanSiswa)) {
+            foreach ($jawabanSiswa as $soal_id => $pilihan) {
+                $soal = Soal::find($soal_id);
+                
+                if($soal) {
+                    $is_benar = (strtoupper($soal->kunci_jawaban) == strtoupper($pilihan));
 
-            // Jika benar, tambah ke counter
-            if ($is_benar) {
-                $jumlahBenar++;
+                    if ($is_benar) {
+                        $jumlahBenar++;
+                    }
+
+                    JawabanUjian::updateOrCreate(
+                        ['user_id' => $user_id, 'ujian_id' => $id, 'soal_id' => $soal_id],
+                        ['jawaban_terpilih' => $pilihan, 'is_benar' => $is_benar]
+                    );
+                }
             }
-
-            \App\Models\JawabanUjian::create([
-                'user_id' => $user_id,
-                'ujian_id' => $id,
-                'soal_id' => $soal_id,
-                'jawaban_terpilih' => $pilihan,
-                'is_benar' => $is_benar
-            ]);
         }
 
         $jumlahSalah = $totalSoal - $jumlahBenar;
@@ -78,20 +95,24 @@ class UjianController extends Controller
             [
                 'jumlah_benar' => $jumlahBenar,
                 'jumlah_salah' => $jumlahSalah,
-                'nilai' => $nilai
+                'nilai' => $nilai,
+                'status' => $statusAkhir
             ]
         );
 
-        return redirect('/siswa/ujian/' . $id . '/hasil');
+        if ($statusAkhir === 'diblokir') {
+            return redirect('/siswa/ujian/' . $id . '/hasil')->with('error', 'Ujian Anda dihentikan paksa karena terdeteksi melanggar aturan (Pindah Tab/Browser).');
+        }
+
+        return redirect('/siswa/ujian/' . $id . '/hasil')->with('success', 'Ujian berhasil diselesaikan!');
     }
 
     public function hasil($id)
     {
         $ujian = Ujian::with('soals')->findOrFail($id);
-        $user_id = \Illuminate\Support\Facades\Auth::id();
+        $user_id = Auth::id();
         $hasil = HasilUjian::where('ujian_id', $id)->where('siswa_id', $user_id)->first();
 
-        // Cegah error jika user memaksa buka halaman hasil tapi belum mengerjakan
         if (!$hasil) {
             return redirect('/siswa/dashboard')->with('error', 'Anda belum mengerjakan ujian ini.');
         }
@@ -100,6 +121,6 @@ class UjianController extends Controller
         $totalSoal = $hasil->jumlah_benar + $hasil->jumlah_salah;
         $nilai = $hasil->nilai;
 
-        return view('siswa.ujian.hasil', compact('ujian', 'jawabanBenar', 'totalSoal', 'nilai'));
+        return view('siswa.ujian.hasil', compact('ujian', 'jawabanBenar', 'totalSoal', 'nilai', 'hasil'));
     }
 }

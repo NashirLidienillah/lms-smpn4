@@ -70,7 +70,7 @@
                         $isBelumMasukKelas = false;
 
                         if($user->role === 'siswa') {
-                            $tahunAktif = \App\Models\TahunAkademik::where('status_aktif', 1)->first(); // Menggunakan 1 untuk status aktif
+                            $tahunAktif = \App\Models\TahunAkademik::where('status_aktif', 1)->first(); 
                             if($tahunAktif) {
                                 $rombel = \App\Models\Rombel::where('user_id', $user->id)->where('tahun_akademik_id', $tahunAktif->id)->first();
                                 if($rombel) {
@@ -125,10 +125,11 @@
                                 <a href="/admin/users/{{ $user->id }}/edit" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-blue-100 text-gray-500 hover:text-blue-600 flex items-center justify-center transition" title="Edit">
                                     <i class="fas fa-pen text-sm"></i>
                                 </a>
-                                <form action="/admin/users/{{ $user->id }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus {{ $user->name }}?');">
+                                {{-- PERUBAHAN TOMBOL HAPUS ADA DI SINI --}}
+                                <form id="delete-user-form-{{ $user->id }}" action="/admin/users/{{ $user->id }}" method="POST" class="inline-block">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 flex items-center justify-center transition" title="Hapus">
+                                    <button type="button" onclick="openDeleteModal({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->role }}')" class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-red-100 text-gray-500 hover:text-red-600 flex items-center justify-center transition" title="Hapus Pengguna">
                                         <i class="fas fa-trash-alt text-sm"></i>
                                     </button>
                                 </form>
@@ -194,7 +195,33 @@
     </div>
 </div>
 
-{{-- SCRIPT TETAP SAMA SEPERTI MILIKMU (Sudah rapi) --}}
+{{-- MODAL KONFIRMASI HAPUS BARU --}}
+<div id="deleteUserModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-0 px-4">
+    <div id="deleteUserModalContent" class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-transform duration-300 relative overflow-hidden">
+        
+        <div class="absolute -right-8 -top-8 w-32 h-32 bg-red-50 rounded-full blur-2xl"></div>
+
+        <div class="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 text-red-600 rounded-full mb-4 border-4 border-white shadow-sm relative z-10">
+            <i class="fas fa-user-times text-2xl"></i>
+        </div>
+        
+        <h3 class="text-xl font-bold text-center text-gray-800 mb-2 relative z-10">Hapus Pengguna?</h3>
+        <p class="text-center text-gray-500 text-sm mb-6 relative z-10 leading-relaxed">
+            Yakin ingin menghapus <span id="deleteRoleBadge" class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mx-1"></span> <br> 
+            <span id="deleteUserName" class="font-bold text-gray-800 text-base"></span>?
+        </p>
+        
+        <div class="flex space-x-3 relative z-10">
+            <button onclick="closeDeleteModal()" class="flex-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-2.5 rounded-xl transition shadow-sm">
+                Batal
+            </button>
+            <button onclick="submitDeleteForm()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow-sm transition">
+                Ya, Hapus
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     let currentRoleFilter = 'semua';
 
@@ -281,6 +308,51 @@
         detailModalContent.classList.remove('scale-100');
         detailModalContent.classList.add('scale-95');
         setTimeout(() => { detailModal.classList.add('hidden'); }, 300);
+    }
+
+    // --- LOGIKA MODAL HAPUS BARU ---
+    let currentDeleteId = null;
+    const deleteUserModal = document.getElementById('deleteUserModal');
+    const deleteUserModalContent = document.getElementById('deleteUserModalContent');
+    const deleteUserName = document.getElementById('deleteUserName');
+    const deleteRoleBadge = document.getElementById('deleteRoleBadge');
+
+    function openDeleteModal(id, name, role) {
+        currentDeleteId = id;
+        deleteUserName.innerText = name;
+        
+        // Atur warna badge berdasarkan role
+        deleteRoleBadge.innerText = role;
+        if(role === 'admin') {
+            deleteRoleBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mx-1 bg-red-100 text-red-600';
+        } else if(role === 'guru') {
+            deleteRoleBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mx-1 bg-emerald-100 text-emerald-600';
+        } else {
+            deleteRoleBadge.className = 'inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mx-1 bg-blue-100 text-blue-600';
+        }
+
+        deleteUserModal.classList.remove('hidden');
+        setTimeout(() => {
+            deleteUserModal.classList.remove('opacity-0');
+            deleteUserModalContent.classList.remove('scale-95');
+            deleteUserModalContent.classList.add('scale-100');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        deleteUserModal.classList.add('opacity-0');
+        deleteUserModalContent.classList.remove('scale-100');
+        deleteUserModalContent.classList.add('scale-95');
+        setTimeout(() => { 
+            deleteUserModal.classList.add('hidden'); 
+            currentDeleteId = null; 
+        }, 300);
+    }
+
+    function submitDeleteForm() {
+        if (currentDeleteId) { 
+            document.getElementById('delete-user-form-' + currentDeleteId).submit(); 
+        }
     }
 </script>
 

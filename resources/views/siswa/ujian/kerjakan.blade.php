@@ -212,7 +212,13 @@
         document.getElementById('status_pengumpulan').value = status;
         document.getElementById('catatan_pelanggaran').value = (status === 'paksa') ? "PELANGGARAN: " + alasan : "";
         sessionStorage.removeItem('v_count');
-
+        if (status === 'paksa') {
+            let inputCheat = document.createElement('input');
+            inputCheat.type = 'hidden';
+            inputCheat.name = 'is_cheat';
+            inputCheat.value = '1';
+            formUjian.appendChild(inputCheat);
+        }
         Swal.fire({
             title: title,
             text: text,

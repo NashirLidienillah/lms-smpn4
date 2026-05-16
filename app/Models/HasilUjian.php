@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class HasilUjian extends Model
 {
-    protected $fillable = ['ujian_id', 'siswa_id', 'jumlah_benar', 'jumlah_salah', 'nilai'];
+    protected $fillable = ['ujian_id', 'siswa_id', 'jumlah_benar', 'jumlah_salah', 'nilai', 'status'];
     public function siswa() { return $this->belongsTo(User::class, 'siswa_id'); }
 }

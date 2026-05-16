@@ -20,9 +20,14 @@
 
     @php
         $hasil = \App\Models\HasilUjian::where('siswa_id', auth()->id())->where('ujian_id', $ujian->id)->first();
+        // Cek apakah ujian sudah dikunci (selesai / diblokir)
+        $isSelesai = $hasil && in_array($hasil->status, ['selesai', 'diblokir']);
+        // Cek apakah ujian sedang berjalan / baru di-resume guru
+        $isMengerjakan = $hasil && $hasil->status === 'mengerjakan';
     @endphp
 
-    @if($hasil)
+    {{-- JIKA SUDAH SELESAI ATAU DIBLOKIR: Tampilkan Laporan --}}
+    @if($isSelesai)
         <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 md:p-12 text-center relative overflow-hidden">
             <div class="absolute top-0 right-0 p-10 opacity-5">
                 <i class="fas fa-award text-9xl text-emerald-600"></i>
@@ -57,6 +62,8 @@
                 <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
             </a>
         </div>
+        
+    {{-- JIKA BELUM SELESAI / SEDANG MENGERJAKAN: Tampilkan Tombol Ujian --}}
     @else
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-4">
@@ -97,10 +104,21 @@
                 </div>
             </div>
 
+            {{-- Pesan Khusus Jika Ujian Di-resume --}}
+            @if($isMengerjakan)
+                <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3">
+                    <i class="fas fa-info-circle text-amber-500 mt-1"></i>
+                    <p class="text-xs text-amber-800 font-bold leading-relaxed">Akses ujian Anda sedang aktif / telah dibuka kembali oleh Guru. Jawaban Anda sebelumnya telah tersimpan. Silakan lanjutkan.</p>
+                </div>
+            @endif
+
             <a href="/siswa/ujian/{{ $ujian->id }}/kerjakan" 
-               class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center font-black py-5 rounded-[1.5rem] transition shadow-xl shadow-emerald-100 text-sm uppercase tracking-[0.3em] active:scale-[0.98] flex items-center justify-center gap-3">
-                Mulai Ujian Sekarang <i class="fas fa-play text-xs"></i>
+               class="w-full text-white text-center font-black py-5 rounded-[1.5rem] transition shadow-xl text-sm uppercase tracking-[0.3em] active:scale-[0.98] flex items-center justify-center gap-3 
+               {{ $isMengerjakan ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-200' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-100' }}">
+                {{ $isMengerjakan ? 'Lanjutkan Ujian' : 'Mulai Ujian Sekarang' }} 
+                <i class="fas {{ $isMengerjakan ? 'fa-forward' : 'fa-play' }} text-xs"></i>
             </a>
+            
             <a href="/siswa/dashboard" class="block text-center mt-6 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-800 transition">
                 Batal, Kembali ke Dashboard
             </a>

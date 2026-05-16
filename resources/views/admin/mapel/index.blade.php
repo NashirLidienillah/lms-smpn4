@@ -30,6 +30,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
+        {{-- ================= KIRI: FORM TAMBAH MAPEL ================= --}}
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700 flex items-center">
@@ -55,64 +56,67 @@
             </div>
         </div>
 
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                    <span class="font-bold text-gray-700">Daftar Mata Pelajaran</span>
-                    <span class="bg-amber-100 text-amber-700 py-1 px-3 rounded-full text-xs font-bold">{{ $mapel->count() }} Mapel</span>
+        {{-- ================= KANAN: DAFTAR MAPEL (GRID & SEARCH) ================= --}}
+        <div class="lg:col-span-2 space-y-4">
+            
+            {{-- Bagian Atas: Info Total & Search --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center text-sm font-bold text-amber-700 bg-amber-50 px-4 py-2.5 rounded-xl border border-amber-100 w-full md:w-auto justify-center">
+                    <i class="fas fa-book text-amber-500 mr-2"></i> Total: {{ $mapel->count() }} Mapel Tersedia
                 </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse whitespace-nowrap">
-                        <thead>
-                            <tr class="bg-white text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
-                                <th class="p-4 font-bold w-16 text-center">No</th>
-                                <th class="p-4 font-bold">Identitas Mata Pelajaran</th>
-                                <th class="p-4 font-bold text-center w-32">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            @forelse($mapel as $index => $m)
-                            <tr class="hover:bg-slate-50 transition duration-200 group">
-                                <td class="p-4 text-center font-medium text-gray-400">{{ $index + 1 }}</td>
-                                <td class="p-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold shrink-0">
-                                            <i class="fas fa-book"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-bold text-gray-800 text-base">{{ $m->nama_mapel }}</div>
-                                            <div class="text-xs text-gray-400 mt-0.5">Kode: MP-{{ str_pad($m->id, 3, '0', STR_PAD_LEFT) }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="p-4 text-center">
-                                    <form id="delete-form-{{ $m->id }}" action="/admin/mapel/{{ $m->id }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" onclick="openDeleteModal({{ $m->id }}, '{{ addslashes($m->nama_mapel) }}')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-red-100 text-gray-400 hover:text-red-600 flex items-center justify-center transition" title="Hapus Mata Pelajaran">
-                                            <i class="fas fa-trash-alt text-sm"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="3" class="p-12 text-center">
-                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-300 mb-4 text-3xl">
-                                        <i class="fas fa-book-dead"></i>
-                                    </div>
-                                    <h3 class="text-lg font-bold text-gray-800">Belum ada data mata pelajaran</h3>
-                                    <p class="text-gray-500 text-sm mt-1">Silakan tambahkan mata pelajaran baru melalui form di samping.</p>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+
+                {{-- Kotak Pencarian --}}
+                <div class="relative w-full md:w-72">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" id="searchMapel" oninput="applyMapelFilter()" class="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 transition font-medium" placeholder="Cari nama pelajaran...">
                 </div>
             </div>
-        </div>
 
+            {{-- Grid Kartu Mapel --}}
+            <div id="mapelGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                @forelse($mapel as $m)
+                    <div class="mapel-card bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center font-black text-xl border border-orange-100 shrink-0 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                                {{ substr(trim($m->nama_mapel), 0, 1) }}
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800 text-sm leading-tight mapel-name">{{ $m->nama_mapel }}</div>
+                                <div class="text-[10px] text-gray-400 font-black tracking-widest uppercase mt-1">Kode: MP-{{ str_pad($m->id, 3, '0', STR_PAD_LEFT) }}</div>
+                            </div>
+                        </div>
+                        
+                        <form id="delete-form-{{ $m->id }}" action="/admin/mapel/{{ $m->id }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" onclick="openDeleteModal({{ $m->id }}, '{{ addslashes($m->nama_mapel) }}')" class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-red-100 text-gray-400 hover:text-red-600 flex items-center justify-center transition opacity-0 group-hover:opacity-100" title="Hapus Mapel">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </button>
+                        </form>
+                    </div>
+                @empty
+                    <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-gray-100 border-dashed">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-300 mb-4 text-3xl">
+                            <i class="fas fa-book-dead"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800">Belum ada data mata pelajaran</h3>
+                        <p class="text-gray-500 text-sm mt-1">Silakan tambahkan mata pelajaran baru melalui form di samping.</p>
+                    </div>
+                @endforelse
+            </div>
+
+            {{-- State Kosong Pencarian --}}
+            <div id="emptySearchMapel" class="hidden bg-white rounded-2xl p-12 text-center border border-gray-100 border-dashed">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-300 mb-4 text-3xl">
+                    <i class="fas fa-search-minus"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800">Mata Pelajaran tidak ditemukan</h3>
+                <p class="text-gray-500 text-sm mt-1">Coba gunakan kata kunci pencarian yang berbeda.</p>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -126,7 +130,7 @@
             <i class="fas fa-exclamation-triangle text-2xl"></i>
         </div>
         
-        <h3 class="text-xl font-bold text-center text-gray-800 mb-2 relative z-10">Hapus Mapel <span id="modalMapelName" class="text-red-600"></span>?</h3>
+        <h3 class="text-xl font-bold text-center text-gray-800 mb-2 relative z-10">Hapus Mapel <span id="modalMapelName" class="text-red-600 font-black"></span>?</h3>
         <p class="text-center text-gray-500 text-sm mb-6 relative z-10">
             Apakah Anda yakin ingin menghapus mata pelajaran ini dari sistem?
         </p>
@@ -143,12 +147,42 @@
 </div>
 
 <script>
+    // --- LOGIKA LIVE SEARCH MAPEL ---
+    function applyMapelFilter() {
+        const searchQuery = document.getElementById('searchMapel').value.toLowerCase();
+        let visibleCount = 0;
+        
+        document.querySelectorAll('.mapel-card').forEach(card => {
+            // Ambil teks dari class .mapel-name
+            const namaMapel = card.querySelector('.mapel-name').innerText.toLowerCase();
+            
+            if (namaMapel.includes(searchQuery)) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Tampilkan State Kosong jika tidak ada yang cocok
+        const emptyState = document.getElementById('emptySearchMapel');
+        const gridContainer = document.getElementById('mapelGrid');
+        
+        if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+            gridContainer.classList.add('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+            gridContainer.classList.remove('hidden');
+        }
+    }
+
+    // --- LOGIKA MODAL HAPUS MAPEL ---
     let currentDeleteId = null;
     const deleteModal = document.getElementById('deleteModal');
     const deleteModalContent = document.getElementById('deleteModalContent');
     const modalMapelName = document.getElementById('modalMapelName');
 
-    // Menerima parameter namaMapel agar peringatannya jelas
     function openDeleteModal(id, namaMapel) {
         currentDeleteId = id;
         modalMapelName.innerText = namaMapel;

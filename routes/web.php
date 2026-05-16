@@ -106,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/soal/{id}/edit', [SoalController::class, 'edit']);
     Route::put('/guru/soal/{id}', [SoalController::class, 'update']);
     Route::delete('/guru/soal/{id}', [SoalController::class, 'destroy']);
+    Route::patch('/guru/ujian/buka-akses/{id}', [App\Http\Controllers\Guru\UjianController::class, 'bukaAkses']);
     // Rute rekap nilai
     Route::get('/guru/ujian/{id}/rekap', [UjianController::class, 'rekapNilai']);
     // Rute Buku Nilai Global

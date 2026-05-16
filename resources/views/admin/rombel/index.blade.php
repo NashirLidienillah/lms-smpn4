@@ -40,6 +40,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
+        {{-- ================= KIRI: FOLDER KELAS ================= --}}
         <div class="lg:col-span-1">
             <div class="sticky top-6 space-y-3">
                 <div class="bg-white px-5 py-3.5 rounded-xl border border-gray-100 shadow-sm font-bold text-gray-700 flex items-center">
@@ -77,9 +78,11 @@
             </div>
         </div>
 
+        {{-- ================= KANAN: MANAJEMEN SISWA ================= --}}
         <div class="lg:col-span-3">
             @if($selectedKelas)
                 
+                {{-- Form Tambah Siswa --}}
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-6 mb-6">
                     <h3 class="font-bold text-gray-800 mb-4 flex items-center">
                         <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3">
@@ -94,12 +97,12 @@
                         
                         <div class="flex-1 relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
+                                <i class="fas fa-search-plus text-gray-400"></i>
                             </div>
-                            <select name="user_id" required class="w-full pl-9 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm transition">
+                            <select name="user_id" required class="w-full pl-9 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm transition font-medium">
                                 <option value="">-- Pilih Siswa yang Belum Punya Kelas --</option>
                                 @foreach($siswaBelumAdaKelas as $s)
-                                    <option value="{{ $s->id }}">{{ $s->name }} ({{ $s->username }})</option>
+                                    <option value="{{ $s->id }}">{{ $s->name }} (NIS: {{ $s->username }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -110,66 +113,70 @@
                     </form>
                 </div>
 
+                {{-- Daftar Siswa di Kelas Ini --}}
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                        <span class="font-bold text-gray-700 flex items-center">
+                    
+                    {{-- Header & Fitur Pencarian --}}
+                    <div class="bg-gray-50 px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center font-bold text-gray-700 w-full sm:w-auto">
                             <i class="fas fa-users mr-2 text-gray-400"></i> Daftar Siswa
-                        </span>
-                        <span class="bg-blue-100 text-blue-700 py-1 px-3 rounded-full text-xs font-bold">{{ count($siswaDiKelas) }} Orang</span>
+                            <span class="ml-3 bg-blue-100 text-blue-700 py-1 px-3 rounded-full text-xs font-bold">{{ count($siswaDiKelas) }} Orang</span>
+                        </div>
+                        
+                        {{-- Kotak Pencarian Siswa --}}
+                        <div class="relative w-full sm:w-64">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" id="searchSiswa" oninput="applySiswaFilter()" class="bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full pl-9 p-2 shadow-sm transition" placeholder="Cari nama atau NIS...">
+                        </div>
                     </div>
                     
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse whitespace-nowrap">
-                            <thead>
-                                <tr class="bg-white text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
-                                    <th class="p-4 font-bold w-16 text-center">No</th>
-                                    <th class="p-4 font-bold">Profil Siswa</th>
-                                    <th class="p-4 font-bold">Username / NIS</th>
-                                    <th class="p-4 font-bold text-center w-28">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-50">
-                                @forelse($siswaDiKelas as $index => $siswa)
-                                <tr class="hover:bg-slate-50 transition duration-200">
-                                    <td class="p-4 text-center font-medium text-gray-400">{{ $index + 1 }}</td>
-                                    
-                                    <td class="p-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-full bg-blue-100/50 text-blue-600 flex items-center justify-center font-bold text-sm uppercase shrink-0">
-                                                {{ substr($siswa->user->name, 0, 1) }}
-                                            </div>
-                                            <div class="font-bold text-gray-800 text-sm">{{ $siswa->user->name }}</div>
+                    {{-- Grid Kartu Siswa (Menggantikan Tabel) --}}
+                    <div class="p-5">
+                        <div id="siswaGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            @forelse($siswaDiKelas as $siswa)
+                                <div class="siswa-card bg-white p-3 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between hover:border-blue-300 hover:shadow-md transition group">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        {{-- Avatar Inisial --}}
+                                        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm uppercase shrink-0 border border-blue-100">
+                                            {{ substr($siswa->user->name, 0, 1) }}
                                         </div>
-                                    </td>
-                                    
-                                    <td class="p-4">
-                                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 font-mono text-xs">
-                                            <i class="fas fa-id-badge text-gray-400"></i> {{ $siswa->user->username }}
+                                        
+                                        {{-- Info Nama & NIS --}}
+                                        <div class="min-w-0">
+                                            <div class="font-bold text-gray-800 text-sm truncate siswa-name" title="{{ $siswa->user->name }}">{{ $siswa->user->name }}</div>
+                                            <div class="text-[10px] font-mono text-gray-500 mt-0.5 siswa-nis tracking-widest"><i class="fas fa-id-badge text-gray-400 mr-1"></i>{{ $siswa->user->username }}</div>
                                         </div>
-                                    </td>
+                                    </div>
                                     
-                                    <td class="p-4 text-center">
-                                        <form id="remove-form-{{ $siswa->id }}" action="/admin/rombel/remove/{{ $siswa->id }}" method="POST" class="inline-block">
-                                            @csrf
-                                            <button type="button" onclick="openRemoveModal({{ $siswa->id }}, '{{ addslashes($siswa->user->name) }}')" class="w-9 h-9 rounded-lg bg-gray-50 hover:bg-orange-100 text-gray-400 hover:text-orange-600 flex items-center justify-center transition" title="Keluarkan dari kelas">
-                                                <i class="fas fa-user-minus text-sm"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="p-16 text-center">
-                                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-300 mb-4 text-3xl">
-                                            <i class="fas fa-user-slash"></i>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-gray-800">Kelas Masih Kosong</h3>
-                                        <p class="text-gray-500 text-sm mt-1">Gunakan form di atas untuk memasukkan siswa ke kelas ini.</p>
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                    {{-- Tombol Keluarkan --}}
+                                    <form id="remove-form-{{ $siswa->id }}" action="/admin/rombel/remove/{{ $siswa->id }}" method="POST" class="shrink-0 ml-2">
+                                        @csrf
+                                        <button type="button" onclick="openRemoveModal({{ $siswa->id }}, '{{ addslashes($siswa->user->name) }}')" class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-orange-100 text-gray-400 hover:text-orange-600 flex items-center justify-center transition opacity-0 group-hover:opacity-100" title="Keluarkan dari kelas">
+                                            <i class="fas fa-user-minus text-xs"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            @empty
+                                <div class="col-span-full py-10 text-center">
+                                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-300 mb-4 text-3xl">
+                                        <i class="fas fa-user-slash"></i>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-800">Kelas Masih Kosong</h3>
+                                    <p class="text-gray-500 text-sm mt-1">Gunakan form di atas untuk memasukkan siswa ke kelas ini.</p>
+                                </div>
+                            @endforelse
+                        </div>
+
+                        {{-- State Kosong Pencarian --}}
+                        <div id="emptySearchSiswa" class="hidden py-10 text-center">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 text-gray-300 mb-4 text-3xl">
+                                <i class="fas fa-search-minus"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-800">Siswa tidak ditemukan</h3>
+                            <p class="text-gray-500 text-sm mt-1">Siswa tersebut mungkin tidak ada di kelas ini.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -215,6 +222,37 @@
 </div>
 
 <script>
+    // --- LOGIKA LIVE SEARCH SISWA ---
+    function applySiswaFilter() {
+        const searchQuery = document.getElementById('searchSiswa').value.toLowerCase();
+        let visibleCount = 0;
+        
+        document.querySelectorAll('.siswa-card').forEach(card => {
+            const nama = card.querySelector('.siswa-name').innerText.toLowerCase();
+            const nis = card.querySelector('.siswa-nis').innerText.toLowerCase();
+            
+            // Cek apakah input cocok dengan Nama atau NIS
+            if (nama.includes(searchQuery) || nis.includes(searchQuery)) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        const emptyState = document.getElementById('emptySearchSiswa');
+        const gridContainer = document.getElementById('siswaGrid');
+        
+        if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+            gridContainer.classList.add('hidden');
+        } else {
+            emptyState.classList.add('hidden');
+            gridContainer.classList.remove('hidden');
+        }
+    }
+
+    // --- LOGIKA MODAL KELUARKAN SISWA ---
     let currentRemoveId = null;
     const removeModal = document.getElementById('removeModal');
     const removeModalContent = document.getElementById('removeModalContent');
