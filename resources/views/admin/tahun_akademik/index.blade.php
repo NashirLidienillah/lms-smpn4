@@ -31,6 +31,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
+        {{-- KOLOM FORM (Ubah di sini) --}}
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700 flex items-center">
@@ -39,27 +40,40 @@
                     </div>
                     Buat Periode Baru
                 </div>
-                <form action="/admin/tahun-akademik" method="POST" class="p-6 space-y-4">
+                
+                <form action="/admin/tahun-akademik" method="POST" class="p-6 space-y-5">
                     @csrf
+                    
+                    {{-- Input Tahun Ajaran --}}
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Tahun Ajaran</label>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Tahun Ajaran</label>
                         <input type="text" name="nama_tahun" required placeholder="Contoh: 2026/2027" 
-                            class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition text-sm">
+                            class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all">
                     </div>
+                    
+                    {{-- Dropdown Semester (Sudah Anti-Kaku) --}}
                     <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">Semester</label>
-                        <select name="semester" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition text-sm font-medium">
-                            <option value="Ganjil">Semester Ganjil</option>
-                            <option value="Genap">Semester Genap</option>
-                        </select>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Semester</label>
+                        <div class="relative group">
+                            <select name="semester" required class="appearance-none w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all cursor-pointer outline-none">
+                                <option value="Ganjil">Semester Ganjil</option>
+                                <option value="Genap">Semester Genap</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400 group-hover:text-indigo-500 transition-colors">
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl transition shadow-sm font-bold flex items-center justify-center mt-4">
+                    
+                    {{-- Tombol Submit --}}
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-4 rounded-xl transition-all shadow-lg shadow-indigo-200 flex items-center justify-center mt-4 uppercase tracking-widest text-xs">
                         <i class="fas fa-save mr-2"></i> Simpan Periode
                     </button>
                 </form>
             </div>
         </div>
 
+        {{-- KOLOM TABEL DATA --}}
         <div class="lg:col-span-2">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">

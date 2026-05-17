@@ -32,8 +32,7 @@ Route::get('/logout', function () {
 });
 
 // Grouping Route berdasarkan Role
-Route::middleware(['auth'])->group(function () {
-    
+Route::middleware(['auth', \App\Http\Middleware\PreventBackHistory::class])->group(function () {
     // Khusus Admin
     Route::middleware('role:admin')->group(function () {
     Route::get('/admin/dashboard', function () { 
