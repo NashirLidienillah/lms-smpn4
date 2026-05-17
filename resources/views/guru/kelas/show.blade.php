@@ -16,7 +16,7 @@
     <div id="toast-error" class="fixed top-5 right-5 flex items-start w-full max-w-md p-5 mb-4 text-gray-700 bg-white rounded-2xl shadow-2xl border-l-4 border-red-500 z-50 transition-all duration-500">
         <div class="inline-flex items-center justify-center flex-shrink-0 w-10 h-10 text-red-500 bg-red-50 rounded-xl mt-0.5"><i class="fas fa-exclamation-circle text-xl"></i></div>
         <div class="ml-4 text-sm">
-            <span class="font-bold text-red-600 block mb-1 text-base">Gagal Menyimpan!</span>
+            <span class="font-bold text-red-600 block mb-1 text-base">Kesalahan Validasi Data</span>
             <ul class="list-disc pl-4 text-gray-500 space-y-1 text-xs font-medium">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -32,11 +32,11 @@
         <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-50 flex items-center justify-center mr-3 transition">
             <i class="fas fa-arrow-left text-xs"></i>
         </div>
-        Kembali ke Dashboard
+        Kembali ke Beranda Guru
     </a>
 
     <a href="/guru/kelas/{{ $jadwal->id }}/rekap-nilai" class="w-full sm:w-auto bg-white border border-blue-200 text-blue-600 hover:bg-blue-600 hover:text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center justify-center gap-2">
-        <i class="fas fa-chart-bar"></i> Rekap Nilai Kelas
+        <i class="fas fa-chart-bar"></i> Rekap Nilai Siswa
     </a>
 </div>
 
@@ -44,7 +44,7 @@
     <div class="absolute left-0 top-0 h-full w-2 bg-blue-600"></div>
     <div class="relative z-10">
         <div class="flex items-center gap-3 mb-2">
-            <span class="bg-blue-50 text-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-[0.1em] border border-blue-100">Portal Guru</span>
+            <span class="bg-blue-50 text-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-[0.1em] border border-blue-100">Kelola Ruang Kelas</span>
             <span class="text-gray-300">•</span>
             <span class="text-sm font-bold text-gray-400">Kelas {{ $jadwal->kelas->nama_kelas }}</span>
         </div>
@@ -56,7 +56,7 @@
             <i class="fas fa-calendar-alt"></i>
         </div>
         <div>
-            <span class="block text-[10px] text-gray-400 font-black uppercase tracking-wider">Jadwal Mengajar</span>
+            <span class="block text-[10px] text-gray-400 font-black uppercase tracking-wider">Jadwal Pelajaran</span>
             <span class="block text-gray-800 font-extrabold text-sm">{{ $jadwal->hari }}</span>
             <span class="block text-xs text-gray-500 font-medium">{{ substr($jadwal->jam_mulai, 0, 5) }} - {{ substr($jadwal->jam_selesai, 0, 5) }} WIB</span>
         </div>
@@ -68,13 +68,14 @@
         <i class="fas fa-book-open"></i> Materi
     </button>
     <button onclick="gantiTab('tugas')" id="btn-tab-tugas" class="flex-1 min-w-[120px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2">
-        <i class="fas fa-tasks"></i> Tugas Esai
+        <i class="fas fa-tasks"></i> Tugas Kelas
     </button>
     <button onclick="gantiTab('ujian')" id="btn-tab-ujian" class="flex-1 min-w-[120px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2">
-        <i class="fas fa-vial"></i> Ujian CBT
+        <i class="fas fa-vial"></i> Kuis & Ujian
     </button>
 </div>
 
+{{-- PANEL 1: MATERI --}}
 <div id="konten-materi" class="grid grid-cols-1 lg:grid-cols-3 gap-8 transition-all">
     <div class="lg:col-span-2 space-y-4">
         @forelse($materis as $materi)
@@ -85,13 +86,13 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-800 text-lg group-hover:text-blue-600 transition-colors">{{ $materi->judul }}</h4>
-                        <p class="text-gray-400 text-xs leading-relaxed mt-1 mb-4">{{ $materi->deskripsi ?? 'Modul pembelajaran untuk siswa.' }}</p>
+                        <p class="text-gray-400 text-xs leading-relaxed mt-1 mb-4">{{ $materi->deskripsi ?? 'Belum ada deskripsi tambahan.' }}</p>
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest"><i class="far fa-clock mr-1"></i> {{ $materi->created_at->diffForHumans() }}</span>
                             @if($materi->tipe === 'file')
-                                <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="text-[10px] font-black bg-orange-100 text-orange-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-orange-600 hover:text-white transition-all"><i class="fas fa-file-download mr-1"></i> Buka Dokumen</a>
+                                <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="text-[10px] font-black bg-orange-100 text-orange-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-orange-600 hover:text-white transition-all"><i class="fas fa-file-download mr-1"></i> Unduh Berkas</a>
                             @else
-                                <a href="{{ $materi->url_youtube }}" target="_blank" class="text-[10px] font-black bg-red-100 text-red-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-red-600 hover:text-white transition-all"><i class="fab fa-youtube mr-1"></i> Tonton Video</a>
+                                <a href="{{ $materi->url_youtube }}" target="_blank" class="text-[10px] font-black bg-red-100 text-red-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-red-600 hover:text-white transition-all"><i class="fab fa-youtube mr-1"></i> Tautan Video</a>
                             @endif
                         </div>
                     </div>
@@ -108,8 +109,8 @@
             </div>
         @empty
             <div class="bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl p-16 text-center">
-                <div class="w-20 h-20 bg-white text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-3xl"><i class="fas fa-cloud-upload-alt"></i></div>
-                <h4 class="font-bold text-gray-400">Belum ada materi yang dibagikan.</h4>
+                <div class="w-20 h-20 bg-white text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-3xl"><i class="fas fa-folder-open"></i></div>
+                <h4 class="font-bold text-gray-400">Belum ada materi pembelajaran tercatat.</h4>
             </div>
         @endforelse
     </div>
@@ -118,19 +119,19 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
             <div class="bg-blue-600 px-6 py-5 flex items-center gap-3">
                 <i class="fas fa-plus-circle text-white text-xl"></i>
-                <h3 class="font-bold text-white uppercase tracking-wider text-sm">Bagikan Materi</h3>
+                <h3 class="font-bold text-white uppercase tracking-wider text-sm">Tambah Materi</h3>
             </div>
             <form action="/guru/kelas/{{ $jadwal->id }}/materi" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
                 @csrf
                 <div>
                     <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Judul Materi</label>
-                    <input type="text" name="judul" required placeholder="Misal: Pertemuan 1 - Intro" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                    <input type="text" name="judul" required placeholder="Contoh: Pertemuan 1 - Pengenalan Dasar" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Sumber Materi</label>
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Jenis Sumber</label>
                     <select name="tipe" id="tipe_materi" onchange="toggleTipeInput()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700">
-                        <option value="file">📄 File Dokumen (PDF/DOC)</option>
-                        <option value="youtube">📺 Video YouTube</option>
+                        <option value="file">📄 Berkas Dokumen (PDF / Word)</option>
+                        <option value="youtube">📺 Video Pembelajaran (YouTube)</option>
                     </select>
                 </div>
                 <div id="box_file" class="p-4 bg-orange-50/50 border border-orange-100 rounded-2xl">
@@ -141,12 +142,13 @@
                     <label class="block text-[10px] font-black text-red-700 uppercase mb-2">Link YouTube</label>
                     <input type="url" name="url_youtube" placeholder="https://youtube.com/..." class="w-full p-2.5 bg-white border border-red-200 rounded-xl text-xs">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-100 transition-all active:scale-95 uppercase tracking-widest text-xs">Publikasikan Materi</button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-100 transition-all active:scale-95 uppercase tracking-widest text-xs">Simpan Data Materi</button>
             </form>
         </div>
     </div>
 </div>
 
+{{-- PANEL 2: TUGAS KELAS --}}
 <div id="konten-tugas" class="grid grid-cols-1 lg:grid-cols-3 gap-8 hidden transition-all">
     <div class="lg:col-span-2 space-y-4">
         @forelse($tugas as $t)
@@ -158,11 +160,11 @@
                         <div>
                             <h4 class="font-bold text-gray-800 text-lg">{{ $t->judul }}</h4>
                             <div class="inline-flex items-center gap-1.5 text-red-600 text-[10px] font-black uppercase bg-red-50 px-2 py-1 rounded-md mb-3 mt-1">
-                                <i class="fas fa-hourglass-half"></i> Deadline: {{ $t->batas_waktu->format('d M, H:i') }}
+                                <i class="fas fa-hourglass-half"></i> Batas Pengumpulan: {{ $t->batas_waktu->format('d M, H:i') }}
                             </div>
                             <p class="text-gray-400 text-sm leading-relaxed mb-4">{{ Str::limit($t->deskripsi, 120) }}</p>
                             <a href="/guru/tugas/{{ $t->id }}/koreksi" class="bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-black px-5 py-3 rounded-xl uppercase tracking-widest shadow-lg shadow-purple-100 transition-all flex items-center justify-center w-full sm:w-max">
-                                <i class="fas fa-user-edit mr-2"></i> Periksa Jawaban Siswa
+                                <i class="fas fa-user-edit mr-2"></i> Periksa Lembar Jawaban Siswa
                             </a>
                         </div>
                     </div>
@@ -180,7 +182,7 @@
         @empty
             <div class="bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl p-16 text-center">
                 <div class="w-20 h-20 bg-white text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-3xl"><i class="fas fa-tasks"></i></div>
-                <h4 class="font-bold text-gray-400">Belum ada tugas yang diberikan.</h4>
+                <h4 class="font-bold text-gray-400">Belum ada daftar tugas untuk kelas ini.</h4>
             </div>
         @endforelse
     </div>
@@ -189,32 +191,33 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
             <div class="bg-purple-600 px-6 py-5 flex items-center gap-3">
                 <i class="fas fa-plus-circle text-white text-xl"></i>
-                <h3 class="font-bold text-white uppercase tracking-wider text-sm">Buat Tugas Esai</h3>
+                <h3 class="font-bold text-white uppercase tracking-wider text-sm">Tambah Tugas Baru</h3>
             </div>
             <form action="/guru/kelas/{{ $jadwal->id }}/tugas" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
                 @csrf
                 <div>
                     <label class="block text-xs font-black text-gray-500 uppercase mb-2">Judul Tugas</label>
-                    <input type="text" name="judul" required placeholder="Contoh: Analisis Struktur Data" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-500 transition">
+                    <input type="text" name="judul" required placeholder="Contoh: Latihan Soal Bab 1" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-500 transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Instruksi Soal</label>
-                    <textarea name="deskripsi" rows="3" required placeholder="Tuliskan detail soal di sini..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-500 transition"></textarea>
+                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Instruksi Pembelajaran</label>
+                    <textarea name="deskripsi" rows="3" required placeholder="Tuliskan petunjuk pengerjaan tugas di sini..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-purple-500 transition"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Batas Waktu (Deadline)</label>
+                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Batas Waktu Pengumpulan</label>
                     <input type="datetime-local" name="batas_waktu" required class="w-full p-3 bg-purple-50 border border-purple-100 rounded-xl text-sm text-purple-700 font-bold">
                 </div>
                 <div class="p-4 bg-gray-50 border border-gray-100 rounded-2xl">
-                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-2">Lampiran File (Opsional)</label>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-2">Lampiran Dokumen Tambahan (Opsional)</label>
                     <input type="file" name="file_tugas" class="w-full text-xs">
                 </div>
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-purple-100 transition-all uppercase tracking-widest text-xs">Terbitkan Tugas</button>
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-purple-100 transition-all uppercase tracking-widest text-xs">Simpan Data Tugas</button>
             </form>
         </div>
     </div>
 </div>
 
+{{-- PANEL 3: KUIS & UJIAN --}}
 <div id="konten-ujian" class="grid grid-cols-1 lg:grid-cols-3 gap-8 hidden transition-all">
     <div class="lg:col-span-2 space-y-4">
         @forelse($ujians as $ujian)
@@ -225,23 +228,23 @@
                         <div class="flex items-center gap-2 mb-1">
                             <h4 class="font-bold text-gray-800 text-xl leading-tight">{{ $ujian->judul }}</h4>
                             @if($ujian->is_published)
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Siswa bisa melihat"></span>
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Status: Aktif"></span>
                             @endif
                         </div>
                         <div class="flex flex-wrap gap-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                            <span><i class="fas fa-stopwatch text-emerald-500 mr-1"></i> {{ $ujian->durasi }} Menit</span>
+                            <span><i class="fas fa-stopwatch text-emerald-500 mr-1"></i> Durasi: {{ $ujian->durasi }} Menit</span>
                             <span><i class="far fa-clock text-blue-500 mr-1"></i> Mulai: {{ $ujian->mulai->format('d M, H:i') }}</span>
-                            <span class="bg-emerald-50 text-emerald-700 px-2 rounded">{{ $ujian->soals->count() }} Soal</span>
+                            <span class="bg-emerald-50 text-emerald-700 px-2 rounded">{{ $ujian->soals->count() }} Soal Terdaftar</span>
                         </div>
                         <div class="mt-4 flex flex-wrap items-center gap-2">
                             <a href="/guru/ujian/{{ $ujian->id }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black px-4 py-2.5 rounded-xl uppercase tracking-wider transition shadow-lg shadow-emerald-50">
-                                <i class="fas fa-list-check mr-2"></i> Kelola Soal
+                                <i class="fas fa-list-check mr-2"></i> Atur Daftar Soal
                             </a>
                             <form action="/guru/ujian/{{ $ujian->id }}/publish" method="POST">
                                 @csrf @method('PATCH')
                                 <button type="submit" class="text-[10px] font-black uppercase tracking-wider px-4 py-2.5 rounded-xl transition {{ $ujian->is_published ? 'bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100' : 'bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100' }}">
                                     <i class="fas {{ $ujian->is_published ? 'fa-eye-slash' : 'fa-paper-plane' }} mr-2"></i>
-                                    {{ $ujian->is_published ? 'Tarik dari Siswa' : 'Bagikan ke Siswa' }}
+                                    {{ $ujian->is_published ? 'Batalkan Terbit' : 'Terbitkan ke Siswa' }}
                                 </button>
                             </form>
                         </div>
@@ -253,14 +256,14 @@
                     
                     <form id="form-hapus-ujian-{{ $ujian->id }}" action="/guru/ujian/{{ $ujian->id }}" method="POST" class="flex-1">
                         @csrf @method('DELETE') 
-                        <button type="button" onclick="hapusDataAdminStyle('form-hapus-ujian-{{ $ujian->id }}', 'Ujian CBT: {{ $ujian->judul }}')" class="w-full sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 flex items-center justify-center border border-gray-100 text-red-500 hover:text-red-700"><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" onclick="hapusDataAdminStyle('form-hapus-ujian-{{ $ujian->id }}', 'Evaluasi: {{ $ujian->judul }}')" class="w-full sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 flex items-center justify-center border border-gray-100 text-red-500 hover:text-red-700"><i class="fas fa-trash-alt text-sm"></i></button>
                     </form>
                 </div>
             </div>
         @empty
             <div class="bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl p-16 text-center">
                 <div class="w-20 h-20 bg-white text-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm text-3xl"><i class="fas fa-vial"></i></div>
-                <h4 class="font-bold text-gray-400">Belum ada ujian yang dibuat.</h4>
+                <h4 class="font-bold text-gray-400">Belum ada evaluasi kuis atau ujian.</h4>
             </div>
         @endforelse
     </div>
@@ -269,29 +272,29 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
             <div class="bg-emerald-600 px-6 py-5 flex items-center gap-3">
                 <i class="fas fa-plus-circle text-white text-xl"></i>
-                <h3 class="font-bold text-white uppercase tracking-wider text-sm">Sesi Ujian CBT</h3>
+                <h3 class="font-bold text-white uppercase tracking-wider text-sm">Tambah Kuis / Ujian</h3>
             </div>
             <form action="/guru/kelas/{{ $jadwal->id }}/ujian" method="POST" class="p-6 space-y-5">
                 @csrf
                 <div>
-                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Judul Ujian</label>
-                    <input type="text" name="judul" required placeholder="Misal: Ulangan Harian 1" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 transition">
+                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Judul Evaluasi</label>
+                    <input type="text" name="judul" required placeholder="Contoh: Ulangan Harian Bab 1" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-500 uppercase mb-2 text-emerald-600">Durasi (Menit)</label>
+                    <label class="block text-xs font-black text-gray-500 uppercase mb-2 text-emerald-600">Durasi Pengerjaan (Menit)</label>
                     <input type="number" name="durasi" required placeholder="60" class="w-full p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-sm font-bold text-emerald-700">
                 </div>
                 <div class="grid grid-cols-1 gap-4">
                     <div>
-                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-1">Mulai Dibuka</label>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-1">Waktu Akses Dibuka</label>
                         <input type="datetime-local" name="mulai" required class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 text-red-500">Selesai/Ditutup</label>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-1 text-red-500">Waktu Akses Ditutup</label>
                         <input type="datetime-local" name="selesai" required class="w-full p-2.5 bg-red-50 border border-red-100 rounded-xl text-xs text-red-700 font-medium">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest text-xs">Buat Sesi Ujian</button>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest text-xs">Simpan Jadwal Evaluasi</button>
             </form>
         </div>
     </div>
@@ -306,7 +309,7 @@
     function hapusDataAdminStyle(formId, namaItem) {
         Swal.fire({
             title: 'Hapus Data?',
-            html: `Apakah Anda yakin ingin menghapus <b>${namaItem}</b>?<br><span class="text-sm text-gray-500">Tindakan ini tidak dapat dibatalkan.</span>`,
+            html: `Apakah Anda yakin ingin menghapus <b>${namaItem}</b>?<br><span class="text-sm text-gray-500">Data yang dihapus tidak dapat dikembalikan.</span>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444', 

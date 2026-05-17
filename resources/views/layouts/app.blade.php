@@ -56,18 +56,18 @@
 
                 {{-- Section: Konfigurasi Awal --}}
                 <div class="px-4 mt-8 mb-2">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Konfigurasi Awal</span>
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Setup Akademik</span>
                 </div>
                 <a href="/admin/tahun-akademik" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/tahun-akademik*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-calendar-check w-6 text-center mr-3 {{ Request::is('admin/tahun-akademik*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Tahun Akademik
+                    <i class="fas fa-calendar-check w-6 text-center mr-3 {{ Request::is('admin/tahun-akademik*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Tahun Ajaran
                 </a>
 
                 {{-- Section: Master Data --}}
                 <div class="px-4 mt-6 mb-2 border-t border-gray-50 pt-5">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Master Data</span>
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Data Induk Sekolah</span>
                 </div>
                 <a href="/admin/users" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/users*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-users w-6 text-center mr-3 {{ Request::is('admin/users*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Data Pengguna
+                    <i class="fas fa-users w-6 text-center mr-3 {{ Request::is('admin/users*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Akun Guru & Siswa
                 </a>
                 <a href="/admin/kelas" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/kelas*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
                     <i class="fas fa-chalkboard w-6 text-center mr-3 {{ Request::is('admin/kelas*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Data Kelas
@@ -78,10 +78,10 @@
 
                 {{-- Section: Manajemen KBM --}}
                 <div class="px-4 mt-6 mb-2 border-t border-gray-50 pt-5">
-                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Manajemen KBM</span>
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Kelola Pembelajaran</span>
                 </div>
                 <a href="/admin/rombel" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/rombel*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-users-cog w-6 text-center mr-3 {{ Request::is('admin/rombel*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Rombongan Belajar
+                    <i class="fas fa-users-cog w-6 text-center mr-3 {{ Request::is('admin/rombel*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Pembagian Kelas
                 </a>
                 <a href="/admin/guru-mapel" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/guru-mapel*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
                     <i class="fas fa-calendar-days w-6 text-center mr-3 {{ Request::is('admin/guru-mapel*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Jadwal Pelajaran
@@ -92,7 +92,7 @@
             {{-- ============================================== --}}
             @elseif(Auth::user()->role === 'guru')
                 <a href="/guru/dashboard" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('guru/dashboard*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-home w-6 text-center mr-3 {{ Request::is('guru/dashboard*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Dashboard Guru
+                    <i class="fas fa-home w-6 text-center mr-3 {{ Request::is('guru/dashboard*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Beranda Guru
                 </a>
 
             {{-- ============================================== --}}
@@ -100,10 +100,10 @@
             {{-- ============================================== --}}
             @elseif(Auth::user()->role === 'siswa')
                 <a href="/siswa/dashboard" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('siswa/dashboard*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-home w-6 text-center mr-3 {{ Request::is('siswa/dashboard*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Dashboard Siswa
+                    <i class="fas fa-home w-6 text-center mr-3 {{ Request::is('siswa/dashboard*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Beranda Siswa
                 </a>
                 <a href="{{ route('siswa.transkrip') }}" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('siswa/transkrip*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-chart-line w-6 text-center mr-3 {{ Request::is('siswa/transkrip*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Transkrip Nilai
+                    <i class="fas fa-chart-line w-6 text-center mr-3 {{ Request::is('siswa/transkrip*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Lihat Nilai
                 </a>
             @endif
 

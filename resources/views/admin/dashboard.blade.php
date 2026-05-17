@@ -4,8 +4,8 @@
 <div class="space-y-6">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-            <h2 class="text-2xl font-bold text-gray-800">Dashboard Administrator</h2>
-            <p class="text-sm text-gray-500 mt-1">Pantau statistik dan kelola data utama LMS SMPN 4 Kota Serang.</p>
+            <h2 class="text-2xl font-bold text-gray-800">Dashboard Utama Admin</h2>
+            <p class="text-sm text-gray-500 mt-1">Kelola data induk sekolah dan pengaturan sistem pembelajaran SMPN 4 Kota Serang.</p>
         </div>
         <div class="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 text-sm font-medium text-gray-600 w-full md:w-auto text-center">
             <i class="far fa-calendar-alt mr-2 text-blue-500"></i> {{ now()->translatedFormat('l, d F Y') }}
@@ -60,9 +60,9 @@
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 lg:col-span-2 relative overflow-hidden">
             <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-50 rounded-full opacity-50"></div>
             
-            <h3 class="text-xl font-bold text-gray-800 mb-2 relative z-10">Selamat Datang di Portal Admin! 👋</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2 relative z-10">Selamat Datang, Admin</h3>
             <p class="text-gray-600 leading-relaxed relative z-10 mb-6">
-                Ini adalah pusat kendali untuk mengatur seluruh data Master di LMS SMPN 4 Kota Serang. Pastikan <span class="font-semibold text-blue-600">Tahun Akademik</span> yang aktif sudah sesuai sebelum guru dan siswa mulai menggunakan sistem ini.
+                Halaman ini digunakan untuk mengelola data induk pada LMS SMPN 4 Kota Serang. Pastikan <span class="font-semibold text-blue-600">Tahun Akademik</span> yang aktif sudah sesuai sebelum guru dan siswa mulai menggunakan sistem ini.
             </p>
             
             <div class="flex flex-col sm:flex-row gap-3 relative z-10">
@@ -75,10 +75,10 @@
         <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-6 md:p-8 rounded-2xl shadow-sm text-white flex flex-col justify-between">
             <div>
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold">Info Akademik Aktif</h3>
+                    <h3 class="text-lg font-bold">Status Tahun Ajaran Aktif</h3>
                     <i class="fas fa-calendar-check text-3xl opacity-30"></i>
                 </div>
-                <p class="text-blue-100 text-sm mb-6">Pastikan pengaturan ini sudah sesuai sebelum KBM dimulai.</p>
+                <p class="text-blue-100 text-sm mb-6">Informasi acuan waktu proses belajar mengajar berjalan.</p>
                 
                 <div class="space-y-4">
                     @if($tahunAktif)

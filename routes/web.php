@@ -23,9 +23,13 @@ use App\Http\Controllers\Siswa\UjianController as SiswaUjian;
 use App\Http\Controllers\Siswa\TranskripController;
 
 // Halaman Login
-Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('/', [AuthController::class, 'index']);
+Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', function () {
+    return redirect('/login');
+});
 
 // Grouping Route berdasarkan Role
 Route::middleware(['auth'])->group(function () {

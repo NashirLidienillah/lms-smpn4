@@ -3,19 +3,20 @@
 @section('content')
 
 <div class="space-y-8">
+    {{-- Banner Selamat Datang --}}
     <div class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 md:p-10 text-white shadow-xl">
         <div class="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-blue-400/20 rounded-full blur-2xl"></div>
         
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight">Selamat Datang, {{ Auth::user()->name }}! 👋</h2>
-                <p class="text-blue-100 text-lg font-medium opacity-90">Senang melihat Anda kembali. Mari mendidik generasi bangsa hari ini.</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-2 tracking-tight">Selamat Datang, {{ Auth::user()->name }}!</h2>
+                <p class="text-blue-100 text-lg font-medium opacity-90">Silakan periksa dan kelola jadwal mengajar Anda pada tahun ajaran yang berjalan.</p>
             </div>
             
             <div class="shrink-0">
                 <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-inner text-center md:text-right">
-                    <span class="block text-[10px] text-blue-200 mb-1 uppercase tracking-[0.2em] font-black">Tahun Akademik Aktif</span>
+                    <span class="block text-[10px] text-blue-200 mb-1 uppercase tracking-[0.2em] font-black">Tahun Ajaran Aktif</span>
                     <div class="flex items-center justify-center md:justify-end gap-2 text-white">
                         <i class="fas fa-calendar-check text-blue-300"></i>
                         @if($tahunAktif)
@@ -29,6 +30,7 @@
         </div>
     </div>
 
+    {{-- Area Jadwal Mengajar --}}
     <div>
         <div class="flex items-center justify-between mb-6">
             <h3 class="text-xl font-bold text-gray-800 flex items-center gap-3">
@@ -48,8 +50,8 @@
                     <i class="fas fa-exclamation-triangle text-xl"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-amber-900">Tahun Akademik Belum Aktif</h4>
-                    <p class="text-amber-700 text-sm leading-relaxed mt-1">Admin sekolah belum mengaktifkan periode akademik. Anda akan dapat melihat jadwal mengajar setelah admin melakukan pengaturan di sisi Master Data.</p>
+                    <h4 class="font-bold text-amber-900">Tahun Ajaran Belum Aktif</h4>
+                    <p class="text-amber-700 text-sm leading-relaxed mt-1">Data jadwal mengajar akan muncul secara otomatis setelah admin sekolah mengaktifkan data tahun ajaran terbaru pada sistem.</p>
                 </div>
             </div>
 
@@ -75,7 +77,7 @@
                     
                     <div class="mb-6">
                         <h4 class="text-xl font-bold text-gray-800 leading-tight group-hover:text-blue-700 transition-colors">{{ $jadwal->mapel->nama_mapel }}</h4>
-                        <p class="text-xs text-gray-400 mt-1">Pusat Pembelajaran Digital SMPN 4 Serang</p>
+                        <p class="text-xs text-gray-400 mt-1">SMPN 4 Kota Serang</p>
                     </div>
                     
                     <a href="/guru/kelas/{{ $jadwal->id }}" class="flex items-center justify-center gap-2 w-full bg-gray-50 group-hover:bg-blue-600 text-gray-600 group-hover:text-white py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 border border-gray-100 group-hover:border-blue-500 group-hover:shadow-lg group-hover:shadow-blue-200">
@@ -89,26 +91,27 @@
         @else
             <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-16 text-center">
                 <div class="w-24 h-24 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner">
-                    <i class="fas fa-mug-hot"></i>
+                    <i class="fas fa-calendar-times"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Jadwal</h3>
-                <p class="text-gray-500 text-sm max-w-xs mx-auto leading-relaxed">Saat ini Anda belum memiliki jadwal mengajar yang terdaftar. Silakan hubungi bagian Kurikulum atau Admin sekolah.</p>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Jadwal Mengajar</h3>
+                <p class="text-gray-500 text-sm max-w-xs mx-auto leading-relaxed">Akun Anda belum terplot ke dalam jadwal mengajar kelas. Silakan hubungi bagian Kurikulum sekolah untuk konfirmasi.</p>
             </div>
         @endif
     </div>
 
+    {{-- Kotak Catatan Informasi Teknis (Bukan Tips Robot) --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-emerald-50 border border-emerald-100 p-6 rounded-3xl">
             <h5 class="text-emerald-900 font-bold flex items-center gap-2 mb-2">
-                <i class="fas fa-lightbulb"></i> Tips Mengajar Online
+                <i class="fas fa-folder-open"></i> Panduan Kelola Kelas
             </h5>
-            <p class="text-emerald-700 text-xs leading-relaxed">Berikan materi dalam bentuk PDF atau Video yang menarik agar siswa lebih mudah memahami pembelajaran di luar jam sekolah.</p>
+            <p class="text-emerald-700 text-xs leading-relaxed">Gunakan tombol masuk ruang kelas untuk mengunggah materi, memberikan lembar kerja tugas, serta membuat kuis latihan untuk siswa.</p>
         </div>
         <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-3xl">
             <h5 class="text-indigo-900 font-bold flex items-center gap-2 mb-2">
-                <i class="fas fa-info-circle"></i> Info Update
+                <i class="fas fa-file-invoice"></i> Catatan Rekapitulasi
             </h5>
-            <p class="text-indigo-700 text-xs leading-relaxed">Sekarang Anda bisa melakukan koreksi tugas secara langsung melalui menu Tugas di dalam masing-masing Ruang Kelas.</p>
+            <p class="text-indigo-700 text-xs leading-relaxed">Seluruh akumulasi nilai dari pengumpulan tugas serta pengerjaan ujian oleh siswa akan tersimpan secara otomatis pada basis data sistem.</p>
         </div>
     </div>
 </div>

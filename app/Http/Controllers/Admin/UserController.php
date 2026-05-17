@@ -20,7 +20,7 @@ class UserController extends Controller {
     public function store(Request $request) {
         $validated = $request->validate ([
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username', // unique biar username tidak kembar
+            'username' => 'required|string|max:255|unique:users,username',
             'password' => 'required|string|min:6',
             'role'     => 'required|in:admin,guru,siswa'
         ]);
