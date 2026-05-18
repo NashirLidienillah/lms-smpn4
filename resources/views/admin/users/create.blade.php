@@ -14,7 +14,7 @@
     </div>
 
     {{-- Bento Form Card --}}
-    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100">
         <form action="/admin/users" method="POST" class="p-6 md:p-8 space-y-6">
             @csrf
 
@@ -23,7 +23,7 @@
                 <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Nama Lengkap</label>
                 <input type="text" name="name" value="{{ old('name') }}" required 
                     placeholder="Contoh: Budi Santoso"
-                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all @error('name') border-red-500 bg-red-50 @enderror">
+                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all outline-none @error('name') border-red-500 bg-red-50 @enderror">
                 @error('name') <span class="text-[10px] font-bold text-red-500 mt-1 block"><i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}</span> @enderror
             </div>
 
@@ -32,7 +32,7 @@
                 <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Username / NIS / NIP</label>
                 <input type="text" name="username" value="{{ old('username') }}" required 
                     placeholder="Contoh: 123456789"
-                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all @error('username') border-red-500 bg-red-50 @enderror">
+                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all outline-none @error('username') border-red-500 bg-red-50 @enderror">
                 @error('username') <span class="text-[10px] font-bold text-red-500 mt-1 block"><i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}</span> @enderror
             </div>
 
@@ -41,27 +41,56 @@
                 <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Password Akses</label>
                 <input type="password" name="password" required 
                     placeholder="Minimal 8 karakter"
-                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all @error('password') border-red-500 bg-red-50 @enderror">
+                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all outline-none @error('password') border-red-500 bg-red-50 @enderror">
                 @error('password') <span class="text-[10px] font-bold text-red-500 mt-1 block"><i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}</span> @enderror
             </div>
 
-            {{-- THE STAR: DROPDOWN ROLE (Anti-Kaku di HP) --}}
+            {{-- THE STAR: DROPDOWN ROLE (100% Custom Alpine.js - Bebas Menu Hitam HP) --}}
             <div>
                 <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Peran (Role)</label>
                 
-                {{-- Bungkus Relative --}}
-                <div class="relative group">
-                    {{-- Select dengan appearance-none --}}
-                    <select name="role" required class="appearance-none w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition-all cursor-pointer outline-none @error('role') border-red-500 bg-red-50 @enderror">
-                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Pilih Peran Akun...</option>
-                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin Sekolah</option>
-                        <option value="guru" {{ old('role') == 'guru' ? 'selected' : '' }}>Guru</option>
-                        <option value="siswa" {{ old('role') == 'siswa' ? 'selected' : '' }}>Siswa</option>
-                    </select>
+                {{-- Alpine Component --}}
+                <div x-data="{ 
+                        open: false, 
+                        selected: '{{ old('role', '') }}', 
+                        options: {
+                            'admin': 'Admin Sekolah', 
+                            'guru': 'Guru', 
+                            'siswa': 'Siswa'
+                        } 
+                    }" class="relative">
                     
-                    {{-- Panah Custom Absolute --}}
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-gray-400 group-hover:text-blue-500 transition-colors">
-                        <i class="fas fa-chevron-down text-sm"></i>
+                    {{-- Hidden Input (Ini yang beneran dikirim ke Laravel) --}}
+                    <input type="hidden" name="role" x-model="selected" required>
+
+                    {{-- Tombol Dropdown Custom --}}
+                    <button @click="open = !open" @click.outside="open = false" type="button" 
+                        class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold flex justify-between items-center focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-sm outline-none">
+                        <span x-text="selected ? options[selected] : 'Pilih Peran Akun...'" 
+                              :class="selected ? 'text-gray-800' : 'text-gray-400'"></span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" :class="open ? 'rotate-180' : ''"></i>
+                    </button>
+
+                    {{-- Menu Popup Melayang (Bukan bawaan HP lagi) --}}
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-2"
+                         style="display: none;"
+                         class="absolute z-50 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden">
+                        
+                        <template x-for="(label, value) in options" :key="value">
+                            <div @click="selected = value; open = false" 
+                                 class="px-4 py-3.5 text-sm font-bold cursor-pointer transition-colors border-b border-gray-50 last:border-0 hover:bg-blue-50 hover:text-blue-600 flex items-center gap-2"
+                                 :class="selected === value ? 'bg-blue-50 text-blue-600' : 'text-gray-600'">
+                                 <span x-text="label"></span>
+                                 <i x-show="selected === value" class="fas fa-check text-blue-500 ml-auto"></i>
+                            </div>
+                        </template>
+                        
                     </div>
                 </div>
                 @error('role') <span class="text-[10px] font-bold text-red-500 mt-1 block"><i class="fas fa-exclamation-circle mr-1"></i> {{ $message }}</span> @enderror
