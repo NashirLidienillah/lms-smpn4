@@ -1,47 +1,76 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
-    <a href="/guru/kelas/{{ $tugas->guru_mapel_id }}" class="inline-flex items-center text-sm text-gray-500 hover:text-purple-600 transition mb-4 font-medium">
+<div class="max-w-2xl mx-auto mb-20">
+    <a href="/guru/kelas/{{ $tugas->guru_mapel_id }}" class="inline-flex items-center text-xs font-black text-gray-400 hover:text-purple-600 transition-all mb-6 uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
         <i class="fas fa-arrow-left mr-2"></i> Batal & Kembali
     </a>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="bg-purple-600 px-6 py-4">
-            <h2 class="text-xl font-bold text-white"><i class="fas fa-edit mr-2"></i> Edit Tugas Esai</h2>
+    {{-- Bento Form Card --}}
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100">
+        <div class="bg-purple-600 px-6 py-5 rounded-t-3xl flex items-center shadow-inner">
+            <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center mr-4 backdrop-blur-sm">
+                <i class="fas fa-edit text-lg"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-white tracking-tight">Edit Tugas Esai</h2>
+                <p class="text-purple-100 text-xs mt-0.5 font-medium">Perbarui detail tugas, tenggat waktu, atau file lampiran.</p>
+            </div>
         </div>
         
-        <form action="/guru/tugas/{{ $tugas->id }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+        <form action="/guru/tugas/{{ $tugas->id }}" method="POST" enctype="multipart/form-data" class="p-6 md:p-8 space-y-6">
             @csrf
             @method('PUT')
             
+            {{-- Input Judul --}}
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Judul Tugas <span class="text-red-500">*</span></label>
-                <input type="text" name="judul" value="{{ $tugas->judul }}" required class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:ring-purple-500 focus:border-purple-500">
+                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Judul Tugas <span class="text-red-500">*</span></label>
+                <input type="text" name="judul" value="{{ $tugas->judul }}" required 
+                    class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:bg-white transition-all outline-none">
             </div>
             
+            {{-- Input Soal/Instruksi --}}
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Soal/Instruksi <span class="text-red-500">*</span></label>
-                <textarea name="deskripsi" rows="4" required class="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:ring-purple-500 focus:border-purple-500">{{ $tugas->deskripsi }}</textarea>
+                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Soal / Instruksi <span class="text-red-500">*</span></label>
+                <textarea name="deskripsi" rows="4" required 
+                    class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium text-gray-800 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 focus:bg-white transition-all outline-none leading-relaxed">{{ $tugas->deskripsi }}</textarea>
             </div>
             
+            {{-- Input Batas Waktu (Bento Style) --}}
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Batas Waktu (Deadline) <span class="text-red-500">*</span></label>
-                <input type="datetime-local" name="batas_waktu" value="{{ $tugas->batas_waktu->format('Y-m-d\TH:i') }}" required class="w-full p-2.5 border border-gray-300 rounded-lg text-sm font-medium text-red-600 bg-red-50 cursor-pointer shadow-sm">
+                <label class="block text-[10px] font-black text-red-400 uppercase tracking-widest mb-2 flex items-center">
+                    <i class="fas fa-stopwatch mr-1.5"></i> Batas Waktu (Deadline) <span class="text-red-500 ml-1">*</span>
+                </label>
+                <input type="datetime-local" name="batas_waktu" value="{{ $tugas->batas_waktu->format('Y-m-d\TH:i') }}" required 
+                    class="w-full p-3.5 border border-red-200 rounded-xl text-sm font-black text-red-700 bg-red-50 focus:ring-2 focus:ring-red-500 focus:bg-white cursor-pointer shadow-sm transition-all outline-none uppercase tracking-wide">
             </div>
 
-            <div class="bg-purple-50 border border-purple-200 p-4 rounded-lg">
-                <label class="block text-sm font-bold text-purple-700 mb-2">Ganti Lampiran File (Opsional)</label>
+            {{-- BOX UPLOAD FILE (Bento Style) --}}
+            <div class="bg-purple-50 border border-purple-100 p-5 rounded-2xl">
+                <label class="block text-[10px] font-black text-purple-800 uppercase tracking-widest mb-3">Ganti Lampiran File <span class="text-purple-500 lowercase font-medium tracking-normal">(Opsional)</span></label>
+                
                 @if($tugas->file_tugas)
-                    <p class="text-sm text-gray-600 mb-3"><i class="fas fa-paperclip mr-1"></i> File saat ini: <span class="font-semibold text-purple-600">{{ $tugas->file_tugas }}</span></p>
+                    <div class="flex items-center bg-white border border-purple-200 p-3 rounded-xl mb-4 shadow-sm">
+                        <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mr-3 shrink-0">
+                            <i class="fas fa-paperclip"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="text-[9px] uppercase tracking-wider font-bold text-gray-400">File Saat Ini</div>
+                            <div class="text-sm font-bold text-purple-700 truncate">{{ $tugas->file_tugas }}</div>
+                        </div>
+                    </div>
                 @endif
-                <input type="file" name="file_tugas" accept=".pdf,.doc,.docx,.jpg,.png" class="w-full text-sm text-gray-500 bg-white border border-purple-200 rounded p-1">
-                <p class="text-xs text-purple-500 mt-2 italic">*Kosongkan jika tidak ingin mengubah file soal yang lama.</p>
+                
+                <span class="block text-[10px] text-purple-400 mb-2">* Kosongkan jika tidak ingin mengubah file lama</span>
+                <input type="file" name="file_tugas" accept=".pdf,.doc,.docx,.jpg,.png" 
+                    class="w-full text-sm font-medium text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition-all bg-white border border-purple-200 rounded-xl p-1.5 shadow-sm outline-none cursor-pointer">
             </div>
 
-            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg shadow-md mt-4 transition">
-                Simpan Perubahan <i class="fas fa-save ml-1"></i>
-            </button>
+            <div class="pt-4 border-t border-gray-100 mt-6">
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-4 rounded-xl shadow-lg shadow-purple-200 transition-all uppercase tracking-widest text-[11px] flex items-center justify-center gap-2">
+                    <i class="fas fa-save"></i> Simpan Perubahan Tugas
+                </button>
+            </div>
         </form>
     </div>
 </div>

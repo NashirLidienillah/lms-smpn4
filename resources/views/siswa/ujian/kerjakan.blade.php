@@ -27,6 +27,7 @@
 
 <div class="max-w-7xl mx-auto pb-20 pt-4 md:pt-10 px-2 sm:px-4 unselectable">
     
+    {{-- Sticky Header Navigasi Ujian --}}
     <div class="sticky top-2 md:top-4 z-50 mb-6 px-2 sm:px-0">
         <div class="bg-white/90 backdrop-blur-xl border border-gray-100 shadow-xl rounded-2xl md:rounded-3xl p-3 md:p-5 flex justify-between items-center">
             <div class="hidden md:block">
@@ -58,6 +59,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
             
+            {{-- KOLOM DAFTAR PERTANYAAN (KIRI) --}}
             <div class="lg:col-span-8 space-y-4 md:space-y-6">
                 @foreach($ujian->soals as $index => $soal)
                 <div id="soal-card-{{ $index + 1 }}" class="bg-white rounded-2xl md:rounded-[2rem] shadow-sm border border-gray-100 p-5 md:p-10 transition-all">
@@ -68,18 +70,22 @@
                         <p class="text-base md:text-xl font-bold text-gray-800 leading-relaxed whitespace-pre-wrap">{{ $soal->pertanyaan }}</p>
                     </div>
                     
+                    {{-- Opsi Pilihan Ganda --}}
                     <div class="grid grid-cols-1 gap-2 md:gap-3">
                         @foreach(['a', 'b', 'c', 'd'] as $huruf)
                         @php $nama_kolom = 'pilihan_' . $huruf; @endphp
-                        <label class="group relative flex items-center p-3 md:p-5 border-2 border-gray-50 rounded-xl md:rounded-2xl cursor-pointer transition-all hover:bg-emerald-50 hover:border-emerald-200">
+                        {{-- Ditambahkan class "has-[:checked]" agar baris otomatis menyala hijau saat dipilih --}}
+                        <label class="group relative flex items-center p-3 md:p-5 border-2 border-gray-100 rounded-xl md:rounded-2xl cursor-pointer transition-all hover:bg-emerald-50/50 hover:border-emerald-200 has-[:checked]:bg-emerald-50 has-[:checked]:border-emerald-500 shadow-sm">
                             <input type="radio" name="jawaban[{{ $soal->id }}]" value="{{ strtoupper($huruf) }}" 
                                    onchange="markAnswered({{ $index + 1 }})"
                                    class="hidden peer" required>
                             
-                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-gray-100 text-gray-500 font-black flex items-center justify-center transition-all peer-checked:bg-emerald-600 peer-checked:text-white shrink-0 uppercase text-xs md:text-sm">
+                            {{-- Bulatan Indikator Huruf --}}
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-gray-100 text-gray-500 font-black flex items-center justify-center transition-all peer-checked:bg-emerald-600 peer-checked:text-white shrink-0 uppercase text-xs md:text-sm shadow-sm">
                                 {{ $huruf }}
                             </div>
                             
+                            {{-- Teks Opsi Jawaban --}}
                             <span class="ml-3 md:ml-4 text-xs md:text-base font-bold text-gray-600 peer-checked:text-emerald-900 transition-colors">
                                 {{ $soal->$nama_kolom }}
                             </span>
@@ -92,8 +98,9 @@
                 @endforeach
             </div>
 
+            {{-- SIDEBAR NAVIGASI NOMOR SOAL (KANAN) --}}
             <div class="lg:col-span-4">
-                <div class="sticky top-20 md:top-28 bg-white rounded-2xl md:rounded-[2rem] border border-gray-100 shadow-sm p-5 md:p-6 text-center">
+                <div class="sticky top-24 md:top-32 bg-white rounded-2xl md:rounded-[2rem] border border-gray-100 shadow-sm p-5 md:p-6 text-center">
                     <h4 class="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4 md:mb-6">Navigasi Soal</h4>
                     
                     <div class="grid grid-cols-5 gap-2 md:gap-3">
@@ -107,8 +114,8 @@
                     </div>
                     
                     <div class="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-dashed border-gray-200">
-                        <p class="text-[8px] md:text-[9px] font-black text-red-500 uppercase leading-relaxed">
-                            <i class="fas fa-lock mr-1"></i> Mode Aman Aktif
+                        <p class="text-[8px] md:text-[9px] font-black text-red-500 uppercase leading-relaxed flex items-center justify-center gap-1">
+                            <i class="fas fa-lock text-[10px]"></i> Mode Aman Aktif
                         </p>
                     </div>
                 </div>
