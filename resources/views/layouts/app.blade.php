@@ -67,7 +67,7 @@
                     <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Data Induk Sekolah</span>
                 </div>
                 <a href="/admin/users" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/users*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
-                    <i class="fas fa-users w-6 text-center mr-3 {{ Request::is('admin/users*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Akun Guru & Siswa
+                    <i class="fas fa-users w-6 text-center mr-3 {{ Request::is('admin/users*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Data Pengguna
                 </a>
                 <a href="/admin/kelas" class="flex items-center py-3 px-4 rounded-xl transition-all {{ Request::is('admin/kelas*') ? 'bg-blue-50 text-blue-700 font-bold shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-blue-600 font-medium' }}">
                     <i class="fas fa-chalkboard w-6 text-center mr-3 {{ Request::is('admin/kelas*') ? 'text-blue-600' : 'text-gray-400' }}"></i> Data Kelas
