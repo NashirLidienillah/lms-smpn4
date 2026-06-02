@@ -27,6 +27,13 @@ class TugasController extends Controller
     // Memproses file jawaban yang diupload siswa
     public function kumpulTugas(Request $request, $id)
     {
+        // VALIDASI WAKTU
+        $tugas = Tugas::findOrFail($id);
+        if (\Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($tugas->batas_waktu))) {
+            return back()->with('error', 'Gagal memproses! Batas waktu pengumpulan tugas telah berakhir.');
+        }
+
+        // VALIDASI INPUT FILE
         $request->validate([
             'file_jawaban' => 'required|mimes:pdf,doc,docx,xls,xlsx,zip,rar,png,jpg,jpeg|max:5120',
             'catatan_siswa' => 'nullable|string'
@@ -35,14 +42,30 @@ class TugasController extends Controller
             'file_jawaban.max' => 'Ukuran file maksimal 5 MB.'
         ]);
 
+        // Cek apakah sudah ada jawaban sebelumnya
+        $jawabanLama = PengumpulanTugas::where('tugas_id', $id)
+                            ->where('siswa_id', Auth::id())
+                            ->first();
+
+        // JIKA SUDAH DINILAI, TOLAK UPLOAD ULANG
+        if ($jawabanLama && $jawabanLama->nilai !== null) {
+            return back()->with('error', 'Tugas sudah dinilai, kamu tidak bisa mengubah jawaban lagi.');
+        }
+
         $file = $request->file('file_jawaban');
         $nama_file = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
         
-        // Simpan ke folder public/uploads/tugas
         $file->move(public_path('uploads/tugas'), $nama_file);
 
-        // Simpan atau Update data ke database
-        // Pakai updateOrCreate supaya kalau siswa upload ulang (revisi), datanya tertimpa, bukan dobel
+        // HAPUS FILE LAMA DARI SERVER
+        if ($jawabanLama && $jawabanLama->file_jawaban) {
+            $pathLama = public_path('uploads/tugas/' . $jawabanLama->file_jawaban);
+            if (file_exists($pathLama)) {
+                unlink($pathLama); // Menghapus file fisik
+            }
+        }
+
+        // SIMPAN ATAU UPDATE KE DATABASE
         PengumpulanTugas::updateOrCreate(
             [
                 'siswa_id' => Auth::id(),
@@ -54,6 +77,6 @@ class TugasController extends Controller
             ]
         );
 
-        return back()->with('success', 'Tugas berhasil diunggah dan dikirim ke guru!');
+        return back()->with('success', 'Tugas berhasil diperbarui dan dikirim ke guru!');
     }
 }
