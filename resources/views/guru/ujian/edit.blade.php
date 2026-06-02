@@ -13,8 +13,8 @@
                 <i class="fas fa-edit text-lg"></i>
             </div>
             <div>
-                <h2 class="text-xl font-black text-white tracking-tight">Edit Pengaturan Ujian CBT</h2>
-                <p class="text-emerald-100 text-xs mt-0.5 font-medium">Perbarui judul, durasi, atau jadwal pelaksanaan ujian.</p>
+                <h2 class="text-xl font-black text-white tracking-tight">Edit Pengaturan Kuis / Ujian</h2>
+                <p class="text-emerald-100 text-xs mt-0.5 font-medium">Perbarui judul, durasi, atau jadwal pelaksanaan kuis / ujian.</p>
             </div>
         </div>
         
@@ -24,7 +24,7 @@
             
             {{-- Input Judul Ujian --}}
             <div>
-                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Judul Ujian <span class="text-red-500">*</span></label>
+                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Judul Kuis / Ujian <span class="text-red-500">*</span></label>
                 <input type="text" name="judul" value="{{ $ujian->judul }}" required 
                     class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all outline-none">
             </div>
@@ -62,7 +62,7 @@
 
             <div class="pt-4 border-t border-gray-100 mt-6">
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-xl shadow-lg shadow-emerald-200 transition-all uppercase tracking-widest text-[11px] flex items-center justify-center gap-2">
-                    <i class="fas fa-save"></i> Simpan Pengaturan Ujian
+                    <i class="fas fa-save"></i> Simpan Pengaturan Kuis / Ujian
                 </button>
             </div>
         </form>
