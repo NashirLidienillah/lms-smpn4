@@ -294,7 +294,7 @@
                         <input type="datetime-local" name="selesai" required class="w-full p-2.5 bg-red-50 border border-red-100 rounded-xl text-xs text-red-700 font-medium">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest text-xs">Simpan Jadwal Evaluasi</button>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest text-xs">Simpan Jadwal Kuis / Ujian</button>
             </form>
         </div>
     </div>
