@@ -69,7 +69,7 @@
                     <div class="flex flex-wrap gap-2 mt-auto">
                         @if(!empty($materi->file_path))
                             <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-orange-50 text-orange-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all border border-orange-100">
-                                <i class="fas fa-file-download mr-2"></i> Unduh Materi Berkas
+                                <i class="fas fa-file-download mr-2"></i> Unduh Berkas Materi
                             </a>
                         @endif
                         @if(!empty($materi->url_youtube))

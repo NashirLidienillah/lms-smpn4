@@ -29,7 +29,7 @@
     {{-- Title Section --}}
     <div class="mb-6 print:hidden">
         <h1 class="text-3xl font-black text-gray-800 tracking-tight">Rekap Nilai Siswa</h1>
-        <p class="text-gray-500 text-sm mt-1">Kumpulan riwayat performa nilai tugas esai dan ujian CBT online siswa.</p>
+        <p class="text-gray-500 text-sm mt-1">Kumpulan riwayat hasil nilai tugas esai, Kuis dan Ujian siswa.</p>
     </div>
 
     {{-- AREA KERTAS CETAK (Print-Optimized + Bento Info Header) --}}
@@ -61,7 +61,7 @@
                 <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-inner font-bold"><i class="fas fa-user-tie"></i></div>
                     <div class="min-w-0 flex-1">
-                        <span class="block text-[9px] text-gray-400 font-black uppercase tracking-wider">Guru Pengampu</span>
+                        <span class="block text-[9px] text-gray-400 font-black uppercase tracking-wider">Guru Pengajar  </span>
                         <div class="text-sm font-black text-gray-800 truncate">{{ Auth::user()->name }}</div>
                     </div>
                 </div>

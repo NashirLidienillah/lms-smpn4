@@ -90,7 +90,7 @@
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest"><i class="far fa-clock mr-1"></i> {{ $materi->created_at->diffForHumans() }}</span>
                             @if($materi->tipe === 'file')
-                                <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="text-[10px] font-black bg-orange-100 text-orange-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-orange-600 hover:text-white transition-all"><i class="fas fa-file-download mr-1"></i> Unduh Berkas</a>
+                                <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="text-[10px] font-black bg-orange-100 text-orange-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-orange-600 hover:text-white transition-all"><i class="fas fa-file-download mr-1"></i> Unduh Materi</a>
                             @else
                                 <a href="{{ $materi->url_youtube }}" target="_blank" class="text-[10px] font-black bg-red-100 text-red-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-red-600 hover:text-white transition-all"><i class="fab fa-youtube mr-1"></i> Tautan Video</a>
                             @endif

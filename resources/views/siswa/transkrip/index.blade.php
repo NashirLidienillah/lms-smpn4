@@ -80,8 +80,8 @@
                 <thead class="bg-slate-50 print:bg-transparent border-b border-gray-100 print:border-black">
                     <tr>
                         <th class="px-8 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest">Mata Pelajaran</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center">Avg Esai</th>
-                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center">Avg CBT</th>
+                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center">Rata-Rata Nilia Esai</th>
+                        <th class="px-6 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center">Rata-Rata Nilai Kuis & Ujian</th>
                         <th class="px-6 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center">Nilai Akhir</th>
                         <th class="px-8 py-4 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-right">Status</th>
                     </tr>

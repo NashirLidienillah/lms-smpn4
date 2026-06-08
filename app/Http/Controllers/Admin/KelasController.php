@@ -22,7 +22,7 @@ class KelasController extends Controller {
     }
 
     public function destroy($id) {
-        $kelas = KElas::findOrFail($id);
+        $kelas = Kelas::findOrFail($id);
         $kelas->delete();
         return redirect('/admin/kelas')->with('success', 'Data kelas berhasil dihapus');
     }
