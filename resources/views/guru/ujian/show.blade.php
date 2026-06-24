@@ -61,7 +61,7 @@
                 <div class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-sm">
                     <i class="fas fa-list-ul"></i>
                 </div>
-                Bank Pertanyaan
+                List Pertanyaan
             </h3>
             
             <a href="/guru/ujian/{{ $ujian->id }}/rekap" class="bg-white border border-blue-200 text-blue-600 hover:bg-blue-600 hover:text-white text-[10px] font-black px-4 py-2.5 rounded-xl uppercase tracking-widest transition shadow-sm flex items-center gap-2">
@@ -133,12 +133,12 @@
                 @csrf
                 
                 <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Teks Pertanyaan</label>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Tambah Pertanyaan</label>
                     <textarea name="pertanyaan" rows="4" required placeholder="Tuliskan butir soal di sini..." class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all outline-none leading-relaxed"></textarea>
                 </div>
 
                 <div class="space-y-3">
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Opsi Jawaban</label>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Pilihan Opsi Jawaban</label>
                     
                     @foreach(['A', 'B', 'C', 'D'] as $label)
                     <div class="flex shadow-sm rounded-xl overflow-hidden border border-gray-200 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500 transition-all">
