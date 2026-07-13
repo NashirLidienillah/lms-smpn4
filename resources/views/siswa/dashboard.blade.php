@@ -13,7 +13,7 @@
                     <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                     <span class="text-[10px] font-black uppercase tracking-[0.2em]">Siswa Aktif</span>
                 </div>
-                <h1 class="text-3xl md:text-5xl font-black mb-3 tracking-tight">Halo, {{ Auth::user()->name }}! 👋</h1>
+                <h1 class="text-3xl md:text-5xl font-black mb-3 tracking-tight">Halo, {{ Auth::user()->name }}</h1>
                 <p class="text-blue-100 text-lg opacity-90 font-medium max-w-xl">Semangat belajarnya hari ini! Semua materi dan tugasmu sudah siap di ruang kelas virtual.</p>
             </div>
             
