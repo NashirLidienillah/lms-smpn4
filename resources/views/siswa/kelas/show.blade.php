@@ -4,37 +4,70 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <div class="space-y-6">
-    {{-- Tombol Kembali & Header Kelas --}}
-    <div class="flex flex-col gap-4">
+    {{-- ================= ACTION BAR (TOMBOL KEMBALI & NOTIFIKASI PINTAR) ================= --}}
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <a href="/siswa/dashboard" class="group inline-flex items-center text-sm font-bold text-gray-400 hover:text-blue-600 transition">
             <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-50 flex items-center justify-center mr-3 transition">
                 <i class="fas fa-arrow-left text-xs"></i>
             </div>
             Kembali ke Beranda Siswa
         </a>
-        
-        <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[2rem] p-8 md:p-10 text-white shadow-xl relative overflow-hidden">
-            <div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-            
-            <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="bg-white/20 backdrop-blur-md text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/30">Ruang Belajar</span>
-                    <span class="text-blue-200 opacity-50">•</span>
-                    <span class="text-sm font-bold text-blue-100">Siswa Aktif</span>
-                </div>
-                <h1 class="text-3xl md:text-5xl font-black mb-2 tracking-tight">{{ $jadwal->mapel->nama_mapel }}</h1>
-                <div class="flex items-center gap-2 text-blue-100 font-medium opacity-90">
-                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                        <i class="fas fa-user-tie text-xs"></i>
-                    </div>
-                    <span>Guru Pengampu: {{ $jadwal->user->name }}</span>
-                </div>
+
+        {{-- TOMBOL NOTIFIKASI PENGUMUMAN (Dengan Logika LocalStorage via Alpine.js) --}}
+        @if($pengumumans->count() > 0)
+            <div x-data="{
+                totalPengumuman: {{ $pengumumans->count() }},
+                dibaca: parseInt(localStorage.getItem('pengumuman_kelas_{{ $jadwal->kelas_id }}')) || 0,
+                
+                // Fungsi pas tombol diklik
+                bukaNotif() {
+                    // Update jumlah yang udah dibaca jadi sama dengan total
+                    this.dibaca = this.totalPengumuman;
+                    // Simpan ke memori browser
+                    localStorage.setItem('pengumuman_kelas_{{ $jadwal->kelas_id }}', this.totalPengumuman);
+                    // Buka pop-up modalnya
+                    bukaModalPengumuman();
+                }
+            }">
+                <button @click="bukaNotif()" class="relative bg-white border border-amber-200 text-amber-600 hover:bg-amber-50 hover:text-amber-700 text-sm font-bold px-5 py-2.5 rounded-xl shadow-sm transition-all duration-300 flex items-center gap-2 group w-full sm:w-auto justify-center">
+                    {{-- Ikon bel goyang-goyang cuma kalau ada yang belum dibaca --}}
+                    <i class="fas fa-bell" :class="totalPengumuman > dibaca ? 'animate-bounce' : ''"></i> 
+                    Lihat Pengumuman Kelas
+                    
+                    {{-- Badge Notifikasi Merah: CUMA MUNCUL KALAU (Total > Dibaca) --}}
+                    <span x-show="totalPengumuman > dibaca" style="display: none;" class="absolute -top-2 -right-2 flex h-6 w-6">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-6 w-6 bg-red-500 text-white text-[10px] font-black items-center justify-center shadow-md" 
+                              x-text="totalPengumuman - dibaca">
+                        </span>
+                    </span>
+                </button>
             </div>
-            <i class="fas fa-book-reader absolute right-10 bottom-4 text-white opacity-5 text-9xl hidden md:block"></i>
+        @endif
+    </div>
+        
+    {{-- ================= HEADER KELAS ================= --}}
+    <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[2rem] p-8 md:p-10 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        
+        <div class="relative z-10">
+            <div class="flex items-center gap-3 mb-3">
+                <span class="bg-white/20 backdrop-blur-md text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/30">Ruang Belajar</span>
+                <span class="text-blue-200 opacity-50">•</span>
+                <span class="text-sm font-bold text-blue-100">Siswa Aktif</span>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-black mb-2 tracking-tight">{{ $jadwal->mapel->nama_mapel }}</h1>
+            <div class="flex items-center gap-2 text-blue-100 font-medium opacity-90">
+                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                    <i class="fas fa-user-tie text-xs"></i>
+                </div>
+                <span>Guru Pengampu: {{ $jadwal->user->name }}</span>
+            </div>
         </div>
+        <i class="fas fa-book-reader absolute right-10 bottom-4 text-white opacity-5 text-9xl hidden md:block"></i>
     </div>
 
-    {{-- Sistem 3 Tab Menu (Materi, Tugas, Kuis & Ujian) --}}
+    {{-- ================= SISTEM 3 TAB MENU (MATERI, TUGAS, UJIAN) ================= --}}
     <div x-data="{ tab: 'materi' }" class="space-y-6">
         <div class="bg-gray-100/50 p-1.5 rounded-2xl flex flex-wrap gap-1 shadow-inner border border-gray-200/50">
             <button @click="tab = 'materi'" :class="tab === 'materi' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'text-gray-400 hover:bg-gray-100'" 
@@ -69,12 +102,12 @@
                     <div class="flex flex-wrap gap-2 mt-auto">
                         @if(!empty($materi->file_path))
                             <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-orange-50 text-orange-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all border border-orange-100">
-                                <i class="fas fa-file-download mr-2"></i> Unduh Berkas Materi
+                                <i class="fas fa-file-download mr-2"></i> Unduh Berkas
                             </a>
                         @endif
                         @if(!empty($materi->url_youtube))
                             <a href="{{ $materi->url_youtube }}" target="_blank" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all border border-red-100">
-                                <i class="fab fa-youtube mr-2"></i> Putar Video Pembelajaran
+                                <i class="fab fa-youtube mr-2"></i> Putar Video
                             </a>
                         @endif
                     </div>
@@ -152,4 +185,66 @@
         </div>
     </div>
 </div>
+
+{{-- ================= MODAL POP-UP DAFTAR PENGUMUMAN SISWA ================= --}}
+<div id="modal-pengumuman" class="fixed inset-0 z-[100] hidden">
+    <!-- Backdrop Blur -->
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="tutupModalPengumuman()"></div>
+    
+    <!-- Container Modal -->
+    <div class="flex items-center justify-center min-h-screen p-4 sm:p-6 text-center">
+        <div class="relative bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all w-full max-w-2xl flex flex-col">
+            
+            <!-- Header Modal -->
+            <div class="bg-amber-500 px-6 md:px-8 py-5 flex justify-between items-center relative overflow-hidden">
+                <i class="fas fa-bullhorn absolute right-5 -bottom-4 text-amber-400/30 text-7xl"></i>
+                <div class="relative z-10">
+                    <span class="bg-amber-400/50 text-amber-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-amber-300 mb-2 inline-block">Info Kelas</span>
+                    <h3 class="text-xl font-black text-white">Papan Pengumuman</h3>
+                </div>
+                <button onclick="tutupModalPengumuman()" class="relative z-10 w-10 h-10 bg-amber-400/50 rounded-full flex items-center justify-center text-white hover:bg-amber-400 transition shadow-sm">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Body Modal (List Pengumuman) -->
+            <div class="p-6 md:p-8 max-h-[70vh] overflow-y-auto bg-slate-50 space-y-4">
+                @forelse($pengumumans as $p)
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-amber-200 transition-all duration-300 relative group">
+                        <div class="absolute left-0 top-0 h-full w-1.5 bg-amber-400 rounded-l-2xl"></div>
+                        <div class="pl-3">
+                            <h4 class="font-bold text-gray-800 text-base md:text-lg mb-1">{{ $p->judul }}</h4>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">
+                                    <i class="far fa-clock mr-1"></i> {{ $p->created_at->format('d M Y, H:i') }}
+                                </span>
+                                <span class="text-[10px] font-bold text-gray-400">Dari Guru</span>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">{{ $p->isi_pengumuman }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <div class="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-10 text-center">
+                        <div class="w-16 h-16 bg-amber-50 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl"><i class="fas fa-check-circle"></i></div>
+                        <h4 class="font-bold text-gray-500 text-sm">Tidak ada pengumuman baru.</h4>
+                    </div>
+                @endforelse
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    // FUNGSI BUKA TUTUP MODAL
+    function bukaModalPengumuman() {
+        document.getElementById('modal-pengumuman').classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Kunci scroll background
+    }
+    
+    function tutupModalPengumuman() {
+        document.getElementById('modal-pengumuman').classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Buka scroll background
+    }
+</script>
 @endsection

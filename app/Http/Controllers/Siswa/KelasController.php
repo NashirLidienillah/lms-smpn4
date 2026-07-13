@@ -20,7 +20,10 @@ class KelasController extends Controller
         $materis = Materi::where('guru_mapel_id', $id)->latest()->get();
         $tugass = Tugas::where('guru_mapel_id', $id)->latest()->get();
         $ujians = Ujian::with('soals')->where('guru_mapel_id', $id)->where('is_published', 1)->latest()->get();
+        $pengumumans = \App\Models\Pengumuman::where('kelas_id', $jadwal->kelas_id)
+                                ->latest()
+                                ->get();
 
-        return view('siswa.kelas.show', compact('jadwal', 'materis', 'tugass', 'ujians'));
+        return view('siswa.kelas.show', compact('jadwal', 'materis', 'tugass', 'ujians', 'pengumumans'));
     }
 }

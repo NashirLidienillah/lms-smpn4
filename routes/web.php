@@ -15,6 +15,7 @@ use App\Http\Controllers\Guru\TugasController;
 use App\Http\Controllers\Guru\UjianController;
 use App\Http\Controllers\Guru\SoalController;
 use App\Http\Controllers\Guru\RekapNilaiController;
+use App\Http\Controllers\Guru\PengumumanController;
 
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboard;
 use App\Http\Controllers\Siswa\KelasController as SiswaKelas;
@@ -114,6 +115,8 @@ Route::middleware(['auth', \App\Http\Middleware\PreventBackHistory::class])->gro
     Route::get('/guru/ujian/{id}/rekap', [UjianController::class, 'rekapNilai']);
     // Rute Buku Nilai Global
     Route::get('/guru/kelas/{id}/rekap-nilai', [RekapNilaiController::class, 'index']);
+    // Rute Pengumuman
+    Route::post('/guru/kelas/{id}/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
     });
 
     // Khusus Siswa

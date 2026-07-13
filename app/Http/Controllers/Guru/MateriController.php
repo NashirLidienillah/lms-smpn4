@@ -23,7 +23,8 @@ class MateriController extends Controller
         $materis = Materi::where('guru_mapel_id', $id)->latest()->get();
         $tugas = \App\Models\Tugas::where('guru_mapel_id', $id)->latest()->get();
         $ujians = \App\Models\Ujian::where('guru_mapel_id', $id)->latest()->get();
-        return view('guru.kelas.show', compact('jadwal', 'materis', 'tugas', 'ujians'));
+        $pengumumans = \App\Models\Pengumuman::where('kelas_id', $jadwal->kelas_id)->latest()->get();
+        return view('guru.kelas.show', compact('jadwal', 'materis', 'tugas', 'ujians', 'pengumumans'));
     }
 
     // Menyimpan Materi Baru
