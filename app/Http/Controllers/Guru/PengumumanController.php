@@ -38,7 +38,7 @@ class PengumumanController extends Controller
         $pengumuman = Pengumuman::findOrFail($id);
         if ($pengumuman->guru_id == Auth::id()) {
             $pengumuman->delete();
-            return back()->with('success', 'Pengumuman berhasil dihapus bray!');
+            return back()->with('success', 'Pengumuman berhasil dihapus');
         }
         return back()->with('error', 'Anda tidak punya akses hapus pengumuman ini');
     }

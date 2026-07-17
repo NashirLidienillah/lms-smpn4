@@ -117,6 +117,7 @@ Route::middleware(['auth', \App\Http\Middleware\PreventBackHistory::class])->gro
     Route::get('/guru/kelas/{id}/rekap-nilai', [RekapNilaiController::class, 'index']);
     // Rute Pengumuman
     Route::post('/guru/kelas/{id}/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+    Route::delete('/guru/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
     });
 
     // Khusus Siswa

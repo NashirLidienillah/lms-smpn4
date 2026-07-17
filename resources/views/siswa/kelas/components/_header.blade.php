@@ -1,11 +1,5 @@
 {{-- Tombol Kembali & Header Kelas --}}
 <div class="flex flex-col gap-4">
-    <a href="/siswa/dashboard" class="group inline-flex items-center text-sm font-bold text-gray-400 hover:text-blue-600 transition">
-        <div class="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-blue-50 flex items-center justify-center mr-3 transition">
-            <i class="fas fa-arrow-left text-xs"></i>
-        </div>
-        Kembali ke Beranda Siswa
-    </a>
     
     <div class="bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[2rem] p-8 md:p-10 text-white shadow-xl relative overflow-hidden">
         <div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
