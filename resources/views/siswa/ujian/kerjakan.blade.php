@@ -42,7 +42,7 @@
     </form>
 </div>
 
-{{-- SCRIPT KEAMANAN CBT (NUCLEAR LOCKDOWN MODE) --}}
+{{-- SCRIPT KEAMANAN CBT --}}
 <script>
     function getViolationCount() {
         let count = sessionStorage.getItem('v_count');
@@ -124,7 +124,7 @@
         Swal.fire({
             title: 'Kumpulkan Sekarang?',
             text: "Pastikan semua soal sudah terjawab dengan benar.",
-            icon: 'question', showCancelButton: true, confirmButtonColor: '#10b981', cancelButtonColor: '#64748b',
+            icon: 'question', showCancelButton: true, confirmButtonColor: '#2563eb', cancelButtonColor: '#64748b',
             confirmButtonText: 'Ya, Selesai!', cancelButtonText: 'Cek Lagi'
         }).then((result) => {
             if (result.isConfirmed) { finishUjian("Berhasil!", "Jawaban Anda sedang dikirim...", "normal"); }
@@ -135,7 +135,7 @@
         const navNum = document.getElementById('nav-number-' + number);
         if(navNum) {
             navNum.classList.remove('bg-gray-50', 'text-gray-400');
-            navNum.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600', 'shadow-md');
+            navNum.classList.add('bg-blue-600', 'text-white', 'border-blue-700', 'shadow-md');
         }
     }
 </script>

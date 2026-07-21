@@ -48,6 +48,7 @@
         }
     }
 
+    // TEMA WARNA BERSATU (Semua Tab Aktif Pakai Biru)
     function gantiTab(tabAktif) {
         ['materi', 'tugas', 'ujian'].forEach(tab => {
             document.getElementById('konten-' + tab).classList.add('hidden');
@@ -58,9 +59,8 @@
         document.getElementById('konten-' + tabAktif).classList.remove('hidden');
         let btnAktif = document.getElementById('btn-tab-' + tabAktif);
         
-        if (tabAktif === 'materi') btnAktif.className = "flex-1 min-w-[120px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 bg-blue-600 text-white shadow-lg shadow-blue-100";
-        if (tabAktif === 'tugas') btnAktif.className = "flex-1 min-w-[120px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 bg-purple-600 text-white shadow-lg shadow-purple-100";
-        if (tabAktif === 'ujian') btnAktif.className = "flex-1 min-w-[120px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 bg-emerald-600 text-white shadow-lg shadow-emerald-100";
+        // Cukup 1 style yang sama untuk semua tab aktif (Corporate Unity)
+        btnAktif.className = "flex-1 min-w-[120px] py-3.5 rounded-xl text-sm font-black transition-all duration-300 flex items-center justify-center gap-2 bg-blue-600 text-white shadow-lg shadow-blue-100";
 
         sessionStorage.setItem('tabKelasAktif', tabAktif);
     }

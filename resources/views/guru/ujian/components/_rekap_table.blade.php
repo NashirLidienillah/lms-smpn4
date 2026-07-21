@@ -1,14 +1,14 @@
 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-left whitespace-nowrap">
-            <thead class="bg-emerald-50/50 border-b border-emerald-100">
+            <thead class="bg-blue-50/50 border-b border-blue-100">
                 <tr>
-                    <th class="px-6 py-5 text-[10px] font-black text-emerald-800 uppercase tracking-widest">Nama Siswa</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">Benar</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">Salah</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">Skor Akhir</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">Status Akses</th>
-                    <th class="px-6 py-5 text-[10px] font-black text-emerald-800 uppercase tracking-widest text-center">Aksi</th>
+                    <th class="px-6 py-5 text-[10px] font-black text-blue-800 uppercase tracking-widest">Nama Siswa</th>
+                    <th class="px-6 py-5 text-[10px] font-black text-blue-800 uppercase tracking-widest text-center">Benar</th>
+                    <th class="px-6 py-5 text-[10px] font-black text-blue-800 uppercase tracking-widest text-center">Salah</th>
+                    <th class="px-6 py-5 text-[10px] font-black text-blue-800 uppercase tracking-widest text-center">Skor Akhir</th>
+                    <th class="px-6 py-5 text-[10px] font-black text-blue-800 uppercase tracking-widest text-center">Status Akses</th>
+                    <th class="px-6 py-5 text-[10px] font-black text-blue-800 uppercase tracking-widest text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
@@ -31,9 +31,9 @@
                                 <span class="font-bold text-gray-800">{{ $namaSiswa }}</span>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-center"><span class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-lg text-sm font-black">{{ $benar }}</span></td>
+                        <td class="px-6 py-4 text-center"><span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-sm font-black">{{ $benar }}</span></td>
                         <td class="px-6 py-4 text-center"><span class="bg-red-50 text-red-500 px-3 py-1 rounded-lg text-sm font-black">{{ $salah }}</span></td>
-                        <td class="px-6 py-4 text-center"><span class="text-lg font-black {{ $skor >= 70 ? 'text-emerald-600' : 'text-red-500' }}">{{ $skor }}</span></td>
+                        <td class="px-6 py-4 text-center"><span class="text-lg font-black {{ $skor >= 70 ? 'text-blue-600' : 'text-red-500' }}">{{ $skor }}</span></td>
                         
                         <td class="px-6 py-4 text-center">
                             @if($status === 'diblokir')

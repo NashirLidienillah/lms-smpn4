@@ -10,7 +10,7 @@
 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
     <div>
         <h1 class="text-3xl font-black text-gray-800 tracking-tight">Rekap Nilai Kuis dan Ujian</h1>
-        <p class="text-gray-500 text-sm mt-1">Ujian: <span class="font-bold text-emerald-600">{{ $ujian->judul }}</span> | Total Soal: {{ $ujian->soals->count() }} Butir</p>
+        <p class="text-gray-500 text-sm mt-1">Ujian: <span class="font-bold text-blue-600">{{ $ujian->judul }}</span> | Total Soal: {{ $ujian->soals->count() }} Butir</p>
     </div>
     <a href="/guru/ujian/{{ $ujian->id }}" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-sm flex items-center">
         <i class="fas fa-arrow-left mr-2"></i> Kembali

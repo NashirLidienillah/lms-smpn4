@@ -1,7 +1,7 @@
 {{-- Bagian Kanan: Status & Form Pengumpulan Tugas --}}
 <div class="space-y-6">
     <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 relative overflow-hidden">
-        <div class="absolute right-0 top-0 w-24 h-24 bg-purple-50 rounded-full -mr-12 -mt-12"></div>
+        <div class="absolute right-0 top-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12"></div>
         
         <h3 class="text-lg font-black text-gray-800 mb-6 uppercase tracking-tight relative z-10">Status Tugas</h3>
         
@@ -21,7 +21,7 @@
         {{-- KONDISI 1: JIKA SISWA SUDAH MENGUMPULKAN JAWABAN --}}
         @if($jawaban)
             <div class="text-center py-4 relative z-10">
-                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner rotate-3 transition-transform hover:rotate-0">
+                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner rotate-3 transition-transform hover:rotate-0">
                     <i class="fas fa-check-double"></i>
                 </div>
                 <h4 class="font-black text-gray-800 uppercase tracking-widest text-xs">Tugas Diserahkan</h4>
@@ -41,7 +41,7 @@
             <div class="mt-8 pt-6 border-t border-dashed border-gray-200">
                 <span class="block text-[10px] text-gray-400 font-black uppercase tracking-widest mb-4">Hasil Evaluasi</span>
                 @if($jawaban->nilai !== null)
-                    <div class="bg-emerald-600 rounded-2xl p-5 text-white shadow-lg shadow-emerald-100 flex items-center justify-between">
+                    <div class="bg-blue-600 rounded-2xl p-5 text-white shadow-lg shadow-blue-100 flex items-center justify-between">
                         <div>
                             <span class="block text-[9px] font-black opacity-70 uppercase">Skor Perolehan</span>
                             <span class="text-4xl font-black tracking-tighter">{{ $jawaban->nilai }}</span>
@@ -64,7 +64,7 @@
                 @endif
             </div>
 
-            {{-- FITUR REVISI JAWABAN (JIKA BELUM MELEWATI DEADLINE & BELUM DINILAI) --}}
+            {{-- FITUR REVISI JAWABAN --}}
             @if(\Carbon\Carbon::now()->lte(\Carbon\Carbon::parse($tugas->batas_waktu)) && $jawaban->nilai === null)
                 <div class="mt-6 pt-6 border-t border-gray-100">
                     <button type="button" onclick="document.getElementById('form-revisi').classList.toggle('hidden')" class="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold py-3 px-4 rounded-xl border border-blue-200 text-xs transition-colors flex items-center justify-between">
@@ -93,7 +93,7 @@
                 </div>
             @endif
 
-        {{-- KONDISI 2: JIKA BELUM KUMPUL & DEADLINE TELAH LEWAT (TERKUNCI) --}}
+        {{-- KONDISI 2: JIKA BELUM KUMPUL & DEADLINE TELAH LEWAT --}}
         @else
             @if(\Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($tugas->batas_waktu)))
                 <div class="text-center py-8 relative z-10">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
 
-            {{-- KONDISI 3: BELUM KUMPUL & MASIH AKTIF (FORM UPLOAD UTAMA) --}}
+            {{-- KONDISI 3: BELUM KUMPUL & MASIH AKTIF --}}
             @else
                 <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl text-[10px] font-bold text-amber-700 leading-relaxed mb-6">
                     <i class="fas fa-exclamation-triangle mr-1"></i> Jangan sampai terlambat! Unggah file jawabanmu sebelum batas waktu berakhir bray.
@@ -121,17 +121,17 @@
                     @csrf
                     <div class="group">
                         <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Upload Jawaban</label>
-                        <input type="file" name="file_jawaban" required class="block w-full text-xs text-gray-400 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-purple-600 file:text-white hover:file:bg-purple-700 transition-all cursor-pointer bg-gray-50 rounded-xl border border-gray-100 font-medium">
+                        <input type="file" name="file_jawaban" required class="block w-full text-xs text-gray-400 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-widest file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer bg-gray-50 rounded-xl border border-gray-100 font-medium">
                         <p class="text-[9px] text-gray-400 mt-2 italic font-medium">* Format: PDF, DOC, ZIP, JPG (Maks 5MB)</p>
                         @error('file_jawaban') <p class="text-red-500 text-[10px] font-bold mt-2 uppercase tracking-tighter">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">Catatan Siswa (Opsional)</label>
-                        <textarea name="catatan_siswa" rows="3" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-xs font-medium focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all shadow-inner" placeholder="Tulis pesan untuk guru jika ada..."></textarea>
+                        <textarea name="catatan_siswa" rows="3" class="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-inner" placeholder="Tulis pesan untuk guru jika ada..."></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-purple-100 transition-all active:scale-95 uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-100 transition-all active:scale-95 uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-2">
                         <i class="fas fa-paper-plane"></i> Kirim Jawaban
                     </button>
                 </form>

@@ -56,7 +56,7 @@
 
                 {{-- UPDATE TEKS FORM: Lebih padat dan langsung ke intinya --}}
                 <div class="mb-8 text-center lg:text-left">
-                    <h2 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 tracking-tight">Selamat Datang 👋</h2>
+                    <h2 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 tracking-tight">Selamat Datang</h2>
                     <p class="text-gray-500 font-medium text-sm">Masukkan username dan password Anda untuk masuk ke sistem.</p>
                 </div>
 

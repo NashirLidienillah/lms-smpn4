@@ -3,10 +3,10 @@
 @section('content')
 <div class="max-w-4xl mx-auto space-y-8">
     
-    {{-- HERO HEADER UTAMA --}}
-    <div class="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-teal-800 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl">
+    {{-- HERO HEADER UTAMA (Blue Theme) --}}
+    <div class="relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl">
         <div class="absolute -right-10 -top-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute left-1/4 bottom-0 w-32 h-32 bg-emerald-400/20 rounded-full blur-2xl"></div>
+        <div class="absolute left-1/4 bottom-0 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl"></div>
 
         <div class="relative z-10 flex flex-col items-center text-center">
             <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 border border-white/30 shadow-inner">

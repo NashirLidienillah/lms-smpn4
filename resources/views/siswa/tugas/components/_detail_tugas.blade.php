@@ -3,7 +3,7 @@
     <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6 md:p-10 border-b border-gray-50">
             <div class="flex items-center gap-2 mb-4">
-                <span class="bg-purple-50 text-purple-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-purple-100">Lembar Tugas Esai</span>
+                <span class="bg-blue-50 text-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-blue-100">Lembar Tugas Esai</span>
             </div>
             
             <h1 class="text-3xl md:text-4xl font-black text-gray-800 tracking-tight mb-6">{{ $tugas->judul }}</h1>

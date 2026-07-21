@@ -4,30 +4,30 @@
         @forelse($ujians as $ujian)
             <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6 group hover:shadow-xl transition-all duration-300">
                 <div class="flex items-center gap-5 w-full">
-                    <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl shrink-0 group-hover:rotate-6 transition-transform"><i class="fas fa-laptop-code"></i></div>
+                    <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl shrink-0 group-hover:rotate-6 transition-transform"><i class="fas fa-laptop-code"></i></div>
                     <div class="w-full">
                         <div class="flex items-center gap-2 mb-1">
-                            <h4 class="font-bold text-gray-800 text-xl leading-tight">{{ $ujian->judul }}</h4>
+                            <h4 class="font-bold text-gray-800 text-xl leading-tight group-hover:text-blue-600 transition-colors">{{ $ujian->judul }}</h4>
                             @if($ujian->is_published)
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Status: Aktif"></span>
+                                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse" title="Status: Aktif"></span>
                             @endif
                         </div>
                         <div class="flex flex-wrap gap-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                            <span><i class="fas fa-stopwatch text-emerald-500 mr-1"></i> Durasi: {{ $ujian->durasi }} Menit</span>
-                            <span><i class="far fa-clock text-blue-500 mr-1"></i> Mulai: {{ $ujian->mulai->format('d M, H:i') }}</span>
+                            <span><i class="fas fa-stopwatch text-blue-500 mr-1"></i> Durasi: {{ $ujian->durasi }} Menit</span>
+                            <span><i class="far fa-clock text-gray-400 mr-1"></i> Mulai: {{ $ujian->mulai->format('d M, H:i') }}</span>
                         </div>
                         <div class="mt-4 flex flex-wrap items-center gap-2">
-                            <a href="/guru/ujian/{{ $ujian->id }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black px-4 py-2.5 rounded-xl uppercase tracking-wider transition shadow-lg shadow-emerald-50">
+                            <a href="/guru/ujian/{{ $ujian->id }}" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black px-4 py-2.5 rounded-xl uppercase tracking-wider transition shadow-lg shadow-blue-50">
                                 <i class="fas fa-list-check mr-2"></i> Atur Daftar Soal
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="flex sm:flex-col gap-2 w-full sm:w-auto">
-                    <a href="/guru/ujian/{{ $ujian->id }}/edit" class="flex-1 sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-blue-50 flex items-center justify-center border border-gray-100"><i class="fas fa-cog"></i></a>
+                    <a href="/guru/ujian/{{ $ujian->id }}/edit" class="flex-1 sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-blue-50 flex items-center justify-center border border-gray-100 hover:text-blue-600 transition-colors"><i class="fas fa-cog"></i></a>
                     <form id="form-hapus-ujian-{{ $ujian->id }}" action="/guru/ujian/{{ $ujian->id }}" method="POST" class="flex-1">
                         @csrf @method('DELETE') 
-                        <button type="button" onclick="hapusDataAdminStyle('form-hapus-ujian-{{ $ujian->id }}', 'Evaluasi: {{ $ujian->judul }}')" class="w-full sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 flex items-center justify-center border border-gray-100 text-red-500 hover:text-red-700"><i class="fas fa-trash-alt text-sm"></i></button>
+                        <button type="button" onclick="hapusDataAdminStyle('form-hapus-ujian-{{ $ujian->id }}', 'Evaluasi: {{ $ujian->judul }}')" class="w-full sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-50 flex items-center justify-center border border-gray-100 hover:text-red-600 transition-colors"><i class="fas fa-trash-alt text-sm"></i></button>
                     </form>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 
     <div class="lg:col-span-1">
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden sticky top-6">
-            <div class="bg-emerald-600 px-6 py-5 flex items-center gap-3">
+            <div class="bg-blue-600 px-6 py-5 flex items-center gap-3">
                 <i class="fas fa-plus-circle text-white text-xl"></i>
                 <h3 class="font-bold text-white uppercase tracking-wider text-sm">Tambah Ujian</h3>
             </div>
@@ -49,13 +49,13 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-black text-gray-500 uppercase mb-2">Judul Evaluasi</label>
-                    <input type="text" name="judul" required placeholder="Contoh: Ulangan Harian Bab 1" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 transition">
+                    <input type="text" name="judul" required placeholder="Contoh: Ulangan Harian Bab 1" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-gray-500 uppercase mb-2 text-emerald-600">Durasi (Menit)</label>
-                    <input type="number" name="durasi" required placeholder="60" class="w-full p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-sm font-bold text-emerald-700">
+                    <label class="block text-xs font-black text-gray-500 uppercase mb-2">Durasi (Menit)</label>
+                    <input type="number" name="durasi" required placeholder="60" class="w-full p-3 bg-blue-50 border border-blue-100 rounded-xl text-sm font-bold text-blue-700 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-100 transition-all uppercase tracking-widest text-xs">Simpan Jadwal Kuis</button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-100 transition-all uppercase tracking-widest text-xs">Simpan Jadwal Kuis</button>
             </form>
         </div>
     </div>

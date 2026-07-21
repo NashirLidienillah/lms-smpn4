@@ -1,7 +1,7 @@
 <div class="lg:col-span-2 space-y-6">
     <div class="flex justify-between items-center px-2">
         <h3 class="font-black text-gray-800 text-lg uppercase tracking-tight flex items-center gap-3">
-            <div class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-list-ul"></i></div>
+            <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-list-ul"></i></div>
             List Pertanyaan
         </h3>
         <a href="/guru/ujian/{{ $ujian->id }}/rekap" class="bg-white border border-blue-200 text-blue-600 hover:bg-blue-600 hover:text-white text-[10px] font-black px-4 py-2.5 rounded-xl uppercase tracking-widest transition shadow-sm flex items-center gap-2">
@@ -11,12 +11,12 @@
 
     @forelse($ujian->soals as $index => $soal)
         <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative group transition-all duration-300 hover:shadow-xl">
-            <div class="absolute -left-3 top-6 w-10 h-10 bg-emerald-600 text-white font-black rounded-xl flex items-center justify-center border-4 border-white shadow-lg group-hover:scale-110 transition-transform">
+            <div class="absolute -left-3 top-6 w-10 h-10 bg-blue-600 text-white font-black rounded-xl flex items-center justify-center border-4 border-white shadow-lg group-hover:scale-110 transition-transform">
                 {{ $index + 1 }}
             </div>
             
             <div class="absolute right-6 top-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <a href="/guru/soal/{{ $soal->id }}/edit" class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 hover:bg-emerald-600 hover:text-white transition shadow-sm">
+                <a href="/guru/soal/{{ $soal->id }}/edit" class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 hover:bg-blue-600 hover:text-white transition shadow-sm">
                     <i class="fas fa-pen text-[10px]"></i>
                 </a>
                 <form action="/guru/soal/{{ $soal->id }}" method="POST" onsubmit="return confirm('Hapus soal ini?');">
@@ -38,13 +38,13 @@
                             $isCorrect = ($soal->kunci_jawaban == $opsi);
                             $pilihanText = $soal->{'pilihan_' . $opsi};
                         @endphp
-                        <div class="p-4 rounded-2xl border transition-all duration-300 flex items-center gap-3 {{ $isCorrect ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-500/20' : 'bg-gray-50 border-gray-100 grayscale-[0.5] opacity-70' }}">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase shrink-0 {{ $isCorrect ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-500' }}">
+                        <div class="p-4 rounded-2xl border transition-all duration-300 flex items-center gap-3 {{ $isCorrect ? 'bg-blue-50 border-blue-200 ring-2 ring-blue-500/20' : 'bg-gray-50 border-gray-100 grayscale-[0.5] opacity-70' }}">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase shrink-0 {{ $isCorrect ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500' }}">
                                 {{ $opsi }}
                             </div>
-                            <span class="text-xs font-bold {{ $isCorrect ? 'text-emerald-900' : 'text-gray-600' }}">{{ $pilihanText }}</span>
+                            <span class="text-xs font-bold {{ $isCorrect ? 'text-blue-900' : 'text-gray-600' }}">{{ $pilihanText }}</span>
                             @if($isCorrect)
-                                <i class="fas fa-check-circle text-emerald-600 ml-auto"></i>
+                                <i class="fas fa-check-circle text-blue-600 ml-auto"></i>
                             @endif
                         </div>
                     @endforeach

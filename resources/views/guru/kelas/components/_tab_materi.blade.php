@@ -51,7 +51,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2">Jenis Sumber</label>
-                    <select name="tipe" id="tipe_materi" onchange="toggleTipeInput()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700">
+                    <select name="tipe" id="tipe_materi" onchange="toggleTipeInput()" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
                         <option value="file">📄 Berkas Dokumen (PDF / Word)</option>
                         <option value="youtube">📺 Video Pembelajaran (YouTube)</option>
                     </select>
