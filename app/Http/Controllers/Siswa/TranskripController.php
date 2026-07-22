@@ -28,26 +28,45 @@ class TranskripController extends Controller
         $transkrip = [];
 
         foreach ($guruMapels as $gm) {
-            $nilaiTugas = DB::table('pengumpulan_tugas')
+            // Ambil Rincian Seluruh Tugas
+            $listTugas = DB::table('pengumpulan_tugas')
                 ->join('tugas', 'pengumpulan_tugas.tugas_id', '=', 'tugas.id')
                 ->where('pengumpulan_tugas.siswa_id', $userId) 
                 ->where('tugas.guru_mapel_id', $gm->id)
-                ->avg('nilai');
+                ->select(
+                    'tugas.judul', 
+                    'pengumpulan_tugas.nilai', 
+                    'pengumpulan_tugas.created_at',
+                    'pengumpulan_tugas.catatan_guru'
+                )
+                ->orderBy('tugas.created_at', 'desc')
+                ->get();
 
-            $nilaiUjian = DB::table('hasil_ujians')
+            // Ambil Rincian Seluruh Kuis & Ujian
+            $listUjian = DB::table('hasil_ujians')
                 ->join('ujians', 'hasil_ujians.ujian_id', '=', 'ujians.id')
                 ->where('hasil_ujians.siswa_id', $userId)
                 ->where('ujians.guru_mapel_id', $gm->id)
-                ->avg('nilai');
+                ->select(
+                    'ujians.judul', 
+                    'hasil_ujians.nilai', 
+                    'hasil_ujians.updated_at'
+                )
+                ->orderBy('ujians.created_at', 'desc')
+                ->get();
 
-            $tugas = $nilaiTugas ?? 0;
-            $ujian = $nilaiUjian ?? 0;
+            // Hitung Rata-rata
+            $tugasAvg = $listTugas->avg('nilai') ?? 0;
+            $ujianAvg = $listUjian->avg('nilai') ?? 0;
+
             $transkrip[] = [
                 'mapel' => $gm->mapel->nama_mapel ?? 'N/A',
                 'guru' => $gm->user->name ?? 'N/A',
-                'rata_tugas' => round($tugas, 2),
-                'rata_ujian' => round($ujian, 2),
-                'total_akhir' => round(($tugas + $ujian) / 2, 2)
+                'rata_tugas' => round($tugasAvg, 2),
+                'rata_ujian' => round($ujianAvg, 2),
+                'total_akhir' => round(($tugasAvg + $ujianAvg) / 2, 2),
+                'detail_tugas' => $listTugas,
+                'detail_ujian' => $listUjian
             ];
         }
 
