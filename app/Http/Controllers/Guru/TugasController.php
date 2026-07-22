@@ -66,15 +66,33 @@ class TugasController extends Controller
         return redirect('/guru/kelas/' . $tugas->guru_mapel_id)->with('success', 'Tugas berhasil diperbarui!');
     }
 
-    // Menampilkan daftar siswa yang sudah/belum kumpul tugas
+    // Menampilkan daftar SELURUH SISWA (Sudah & Belum Kumpul) sebagai Absensi Task-Based
     public function koreksi($id)
     {
-        $tugas = \App\Models\Tugas::findOrFail($id);
-        
-        // Ambil data pengumpulan tugas beserta data siswanya
-        $pengumpulan = \App\Models\PengumpulanTugas::with('siswa')
-                        ->where('tugas_id', $id)
-                        ->get();
+        $tugas = \App\Models\Tugas::with('guruMapel')->findOrFail($id);
+        $kelasId = $tugas->guruMapel->kelas_id;
+
+        // Ambil ID siswa pakai kolom 'user_id'
+        $siswaIds = \App\Models\Rombel::where('kelas_id', $kelasId)->pluck('user_id');
+
+        $pengumpulan = \App\Models\User::whereIn('users.id', $siswaIds)
+            ->where('role', 'siswa')
+            ->leftJoin('pengumpulan_tugas', function ($join) use ($id) {
+                $join->on('users.id', '=', 'pengumpulan_tugas.siswa_id')
+                     ->where('pengumpulan_tugas.tugas_id', '=', $id);
+            })
+            ->select(
+                'users.id as user_id',
+                'users.name as nama_siswa',
+                'pengumpulan_tugas.id as pengumpulan_id',
+                'pengumpulan_tugas.file_jawaban',
+                'pengumpulan_tugas.catatan_siswa',
+                'pengumpulan_tugas.nilai',
+                'pengumpulan_tugas.catatan_guru',
+                'pengumpulan_tugas.created_at as tanggal_kumpul'
+            )
+            ->orderBy('users.name', 'asc')
+            ->get();
 
         return view('guru.tugas.koreksi', compact('tugas', 'pengumpulan'));
     }
