@@ -17,14 +17,29 @@
         <p class="text-sm text-gray-500">{{ $tugas->judul }}</p>
     </div>
     
-    <div class="flex gap-3 w-full md:w-auto">
+    <div class="flex flex-wrap gap-3 w-full md:w-auto">
+        {{-- Kartu 1: Total Mengumpulkan --}}
         <div class="bg-blue-50 border border-blue-100 p-3 px-5 rounded-2xl flex-1 md:flex-none">
             <span class="block text-[10px] font-black text-blue-400 uppercase tracking-widest">Mengumpulkan</span>
-            <span class="text-xl font-bold text-blue-700">{{ $pengumpulan->count() }}</span>
+            <span class="text-xl font-bold text-blue-700">
+                {{ $totalKumpul }} <small class="text-xs text-blue-400 font-bold">/ {{ $totalSiswa }} Siswa</small>
+            </span>
         </div>
+
+        {{-- Kartu 2: Belum Dinilai --}}
+        <div class="bg-amber-50 border border-amber-100 p-3 px-5 rounded-2xl flex-1 md:flex-none">
+            <span class="block text-[10px] font-black text-amber-500 uppercase tracking-widest">Belum Dinilai</span>
+            <span class="text-xl font-bold {{ $belumDinilai > 0 ? 'text-amber-600' : 'text-gray-400' }}">
+                {{ $belumDinilai }} <small class="text-xs font-bold text-gray-400">Siswa</small>
+            </span>
+        </div>
+
+        {{-- Kartu 3: Sudah Dinilai --}}
         <div class="bg-emerald-50 border border-emerald-100 p-3 px-5 rounded-2xl flex-1 md:flex-none">
             <span class="block text-[10px] font-black text-emerald-400 uppercase tracking-widest">Sudah Dinilai</span>
-            <span class="text-xl font-bold text-emerald-700">{{ $pengumpulan->whereNotNull('nilai')->count() }}</span>
+            <span class="text-xl font-bold text-emerald-700">
+                {{ $sudahDinilai }} <small class="text-xs font-bold text-emerald-400">Siswa</small>
+            </span>
         </div>
     </div>
 </div>

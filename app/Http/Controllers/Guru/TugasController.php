@@ -94,7 +94,20 @@ class TugasController extends Controller
             ->orderBy('users.name', 'asc')
             ->get();
 
-        return view('guru.tugas.koreksi', compact('tugas', 'pengumpulan'));
+        // HITUNG STATISTIK 
+        $totalSiswa = $pengumpulan->count();
+        $totalKumpul = $pengumpulan->whereNotNull('file_jawaban')->count();
+        $sudahDinilai = $pengumpulan->whereNotNull('nilai')->count();
+        $belumDinilai = $pengumpulan->whereNotNull('file_jawaban')->whereNull('nilai')->count();
+
+        return view('guru.tugas.koreksi', compact(
+            'tugas', 
+            'pengumpulan', 
+            'totalSiswa', 
+            'totalKumpul', 
+            'sudahDinilai', 
+            'belumDinilai'
+        ));
     }
 
     // Menyimpan nilai dari guru ke database
