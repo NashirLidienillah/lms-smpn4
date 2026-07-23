@@ -1,21 +1,29 @@
-{{-- Konten Tab Materi --}}
-<div id="konten-materi" class="grid grid-cols-1 lg:grid-cols-3 gap-8 transition-all">
+{{-- Konten Tab Materi Guru dengan Rekap Presensi Modal --}}
+<div id="konten-materi" x-data="rekapMateriModal()" class="grid grid-cols-1 lg:grid-cols-3 gap-8 transition-all">
     <div class="lg:col-span-2 space-y-4">
         @forelse($materis as $materi)
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start gap-4 hover:shadow-xl transition-all duration-300 group">
-                <div class="flex items-start gap-4">
+                <div class="flex items-start gap-4 flex-1">
                     <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 transition-transform group-hover:scale-110 {{ $materi->tipe === 'file' ? 'bg-orange-50 text-orange-500' : 'bg-red-50 text-red-500' }}">
                         <i class="fas {{ $materi->tipe === 'file' ? 'fa-file-pdf' : 'fa-play-circle' }}"></i>
                     </div>
-                    <div>
+                    <div class="flex-1">
                         <h4 class="font-bold text-gray-800 text-lg group-hover:text-blue-600 transition-colors">{{ $materi->judul }}</h4>
-                        <p class="text-gray-400 text-xs leading-relaxed mt-1 mb-4">{{ $materi->deskripsi ?? 'Belum ada deskripsi tambahan.' }}</p>
+                        <p class="text-gray-400 text-xs leading-relaxed mt-1 mb-3">{{ $materi->deskripsi ?? 'Belum ada deskripsi tambahan.' }}</p>
+                        
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                            {{-- Tombol Badge Rekap Presensi --}}
+                            <button type="button" @click="openModal({{ $materi->id }})" class="text-[10px] font-black bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-1.5 rounded-lg uppercase tracking-wider transition-all flex items-center gap-1.5 border border-blue-100 shadow-sm">
+                                <i class="fas fa-user-check"></i> Presensi: {{ $materi->total_dibaca ?? 0 }}/{{ $materi->total_siswa ?? 0 }} Siswa
+                            </button>
+                        </div>
+
                         <div class="flex flex-wrap items-center gap-3">
                             <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest"><i class="far fa-clock mr-1"></i> {{ $materi->created_at->diffForHumans() }}</span>
                             @if($materi->tipe === 'file')
-                                <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="text-[10px] font-black bg-orange-100 text-orange-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-orange-600 hover:text-white transition-all"><i class="fas fa-file-download mr-1"></i> Unduh Materi</a>
+                                <a href="{{ asset('storage/materi/' . $materi->file_path) }}" target="_blank" class="text-[10px] font-black bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg uppercase tracking-wider hover:bg-orange-600 hover:text-white transition-all"><i class="fas fa-file-download mr-1"></i> Unduh File</a>
                             @else
-                                <a href="{{ $materi->url_youtube }}" target="_blank" class="text-[10px] font-black bg-red-100 text-red-600 px-4 py-2 rounded-lg uppercase tracking-wider hover:bg-red-600 hover:text-white transition-all"><i class="fab fa-youtube mr-1"></i> Tautan Video</a>
+                                <a href="{{ $materi->url_youtube }}" target="_blank" class="text-[10px] font-black bg-red-100 text-red-600 px-3 py-1.5 rounded-lg uppercase tracking-wider hover:bg-red-600 hover:text-white transition-all"><i class="fab fa-youtube mr-1"></i> Tautan Video</a>
                             @endif
                         </div>
                     </div>
@@ -68,4 +76,83 @@
             </form>
         </div>
     </div>
+
+    {{-- MODAL POPUP REKAP PRESENSI MATERI --}}
+    <div x-show="show" x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style="display: none;">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+                <div>
+                    <span class="text-[10px] font-black text-blue-600 uppercase tracking-widest block">Rekap Kehadiran Materi</span>
+                    <h3 class="text-base font-black text-gray-800" x-text="materiJudul"></h3>
+                </div>
+                <button @click="show = false" class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 flex items-center justify-center text-xs font-bold transition">✕</button>
+            </div>
+
+            <div class="overflow-y-auto flex-1 space-y-2 pr-1">
+                <template x-if="loading">
+                    <div class="text-center py-8 text-gray-400 text-xs font-bold">
+                        <i class="fas fa-spinner fa-spin mr-2"></i> Memuat data presensi...
+                    </div>
+                </template>
+
+                <template x-if="!loading">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b border-gray-100 text-gray-400 font-black uppercase text-[9px] tracking-widest">
+                            <tr>
+                                <th class="px-4 py-3">Nama Siswa</th>
+                                <th class="px-4 py-3 text-center">Waktu Akses</th>
+                                <th class="px-4 py-3 text-right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <template x-for="item in rekapList" :key="item.user_id">
+                                <tr>
+                                    <td class="px-4 py-3 font-bold text-gray-800" x-text="item.nama_siswa"></td>
+                                    <td class="px-4 py-3 text-center font-mono text-gray-500" x-text="item.waktu_akses ? item.waktu_akses : '-'"></td>
+                                    <td class="px-4 py-3 text-right">
+                                        <template x-if="item.waktu_akses">
+                                            <span class="inline-flex items-center gap-1 bg-emerald-500 text-white px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                                ✔ Hadir
+                                            </span>
+                                        </template>
+                                        <template x-if="!item.waktu_akses">
+                                            <span class="inline-flex items-center gap-1 bg-red-500 text-white px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider">
+                                                ✘ Belum Akses
+                                            </span>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+function rekapMateriModal() {
+    return {
+        show: false,
+        loading: false,
+        materiJudul: '',
+        rekapList: [],
+        openModal(materiId) {
+            this.show = true;
+            this.loading = true;
+            fetch('/guru/materi/' + materiId + '/rekap-presensi')
+                .then(res => res.json())
+                .then(data => {
+                    this.materiJudul = data.materi;
+                    this.rekapList = data.rekap;
+                    this.loading = false;
+                })
+                .catch(err => {
+                    this.loading = false;
+                    alert('Gagal mengambil data presensi.');
+                });
+        }
+    }
+}
+</script>

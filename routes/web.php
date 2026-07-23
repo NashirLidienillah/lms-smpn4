@@ -89,6 +89,7 @@ Route::middleware(['auth', \App\Http\Middleware\PreventBackHistory::class])->gro
     Route::get('/guru/materi/{id}/edit', [MateriController::class, 'edit']);
     Route::put('/guru/materi/{id}', [MateriController::class, 'update']);
     Route::delete('/guru/materi/{id}', [MateriController::class, 'destroy']);
+    Route::get('/guru/materi/{id}/rekap-presensi', [MateriController::class, 'rekapPresensi']);
     // Rute Tugas 
     Route::post('/guru/kelas/{id}/tugas', [TugasController::class, 'store']);
     Route::get('/guru/tugas/{id}/edit', [TugasController::class, 'edit']);
@@ -131,6 +132,7 @@ Route::middleware(['auth', \App\Http\Middleware\PreventBackHistory::class])->gro
     Route::post('/siswa/ujian/{id}/simpan', [SiswaUjian::class, 'simpanJawaban']);
     Route::get('/siswa/ujian/{id}/hasil', [SiswaUjian::class, 'hasil']);
     Route::get('/siswa/transkrip', [TranskripController::class, 'transkrip'])->name('siswa.transkrip');
+    Route::get('/siswa/materi/{id}/download', [SiswaKelas::class, 'downloadMateri'])->name('siswa.materi.download');
     });
 
 });
