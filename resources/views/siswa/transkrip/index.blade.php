@@ -8,6 +8,32 @@
         @include('siswa.transkrip.components._header')
     </div>
 
+    {{-- FILTER TAHUN AKADEMIK / SEMESTER (MUNCUL DI TAMPILAN WEB) --}}
+    <div class="print:hidden bg-white p-5 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fas fa-filter"></i>
+            </div>
+            <div>
+                <h4 class="text-xs font-black text-gray-800 uppercase tracking-wider">Filter Periode Semester</h4>
+                <p class="text-[11px] text-gray-400 font-medium">Pilih semester untuk melihat riwayat nilai akademik kamu.</p>
+            </div>
+        </div>
+
+        <form method="GET" action="{{ route('siswa.transkrip') }}" class="flex items-center gap-2">
+            <select name="tahun_akademik_id" onchange="this.form.submit()" class="bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-800 text-xs font-bold rounded-2xl px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none cursor-pointer">
+                <option value="all" {{ $tahunAkademikId == 'all' ? 'selected' : '' }}>
+                    📚 Semua History Semester
+                </option>
+                @foreach($daftarTahunAkademik as $ta)
+                    <option value="{{ $ta->id }}" {{ $tahunAkademikId == $ta->id ? 'selected' : '' }}>
+                        Tahun {{ $ta->nama_tahun }} - Semester {{ $ta->semester }} {{ $ta->status_aktif ? '⭐ (Aktif)' : '' }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+    </div>
+
     {{-- HEADER DOKUMEN TRANSKRIP MODERN (MUNCUL SAAT CETAK/PDF) --}}
     <div class="hidden print:block border-b-2 border-gray-800 pb-4 mb-4">
         <div class="flex justify-between items-end">

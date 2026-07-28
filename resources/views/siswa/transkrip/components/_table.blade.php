@@ -16,7 +16,7 @@
         <table class="w-full text-left whitespace-nowrap print:whitespace-normal">
             <thead class="bg-slate-50 print:bg-gray-100 border-b border-gray-100 print:border-black">
                 <tr>
-                    <th class="px-8 py-4 print:px-3 print:py-2 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest print:border print:border-black">Mata Pelajaran</th>
+                    <th class="px-8 py-4 print:px-3 print:py-2 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest print:border print:border-black">Mata Pelajaran & Periode</th>
                     <th class="px-6 py-4 print:px-3 print:py-2 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center print:border print:border-black">Rata Tugas</th>
                     <th class="px-6 py-4 print:px-3 print:py-2 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center print:border print:border-black">Rata Ujian</th>
                     <th class="px-6 py-4 print:px-3 print:py-2 text-[10px] font-black text-gray-400 print:text-black uppercase tracking-widest text-center print:border print:border-black">Nilai Akhir</th>
@@ -35,8 +35,21 @@
                                 {{ substr($data['mapel'], 0, 1) }}
                             </div>
                             <div>
+                                {{-- Nama Mapel --}}
                                 <span class="font-bold text-gray-800 print:text-black block text-sm print:text-xs">{{ $data['mapel'] }}</span>
-                                <span class="text-[10px] font-semibold text-gray-400 print:text-gray-700 uppercase tracking-wider block mt-0.5">Pengampu: {{ $data['guru'] }}</span>
+                                
+                                {{-- BADGE INFORMASI PERIODE SEMESTER & KELAS --}}
+                                <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100 print:border-gray-400 print:bg-transparent print:text-black">
+                                        <i class="fas fa-calendar-alt text-[9px] mr-1 print:hidden"></i> {{ $data['tahun_ajaran'] }}
+                                    </span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-gray-100 text-gray-600 border border-gray-200 print:border-gray-400 print:bg-transparent print:text-black">
+                                        Kelas {{ $data['kelas'] }}
+                                    </span>
+                                    <span class="text-[10px] font-semibold text-gray-400 print:text-gray-700 uppercase tracking-wider block">
+                                        • Pengampu: {{ $data['guru'] }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -135,7 +148,7 @@
                 @empty
                 <tr>
                     <td colspan="5" class="px-8 py-16 text-center text-gray-400">
-                        Belum ada data nilai tersedia.
+                        Belum ada data nilai tersedia untuk periode ini.
                     </td>
                 </tr>
                 @endforelse

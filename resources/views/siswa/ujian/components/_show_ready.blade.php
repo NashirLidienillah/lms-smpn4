@@ -43,7 +43,7 @@
     @if($isMengerjakan)
         <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3">
             <i class="fas fa-info-circle text-amber-500 mt-1"></i>
-            <p class="text-xs text-amber-800 font-bold leading-relaxed">Akses ujian Anda sedang aktif / telah dibuka kembali oleh Guru. Jawaban Anda sebelumnya telah tersimpan. Silakan lanjutkan bray.</p>
+            <p class="text-xs text-amber-800 font-bold leading-relaxed">Akses ujian Anda sedang aktif / telah dibuka kembali oleh Guru. Jawaban Anda sebelumnya telah tersimpan. Silahkan lanjutkan</p>
         </div>
     @endif
 
