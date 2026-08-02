@@ -47,7 +47,7 @@ class UserController extends Controller {
         }
         $validated = $request->validate($rules);
 
-        if ($request->filled('pasword')) {
+        if ($request->filled('password')) {
             $validated['password'] = bcrypt($request->password);
         }
         $user->update($validated);
